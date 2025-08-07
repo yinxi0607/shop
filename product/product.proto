@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "./product";
+
+message Product {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string detail = 4;
+  string main_image = 5;
+  string thumbnail = 6;
+  double price = 7;
+  int32 stock = 8;
+  int64 category_id = 9;
+  string created_at = 10;
+  string updated_at = 11;
+}
+
+message ListProductsRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+  optional int64 category_id = 3;
+  optional double min_price = 4;
+  optional double max_price = 5;
+}
+
+message ListProductsResponse {
+  repeated Product products = 1;
+  int32 total = 2;
+}
+
+message GetProductDetailRequest {
+  int64 id = 1;
+}
+
+message GetProductDetailResponse {
+  Product product = 1;
+}
+
+message UpdateProductRequest {
+  int64 id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional string detail = 4;
+  optional string main_image = 5;
+  optional string thumbnail = 6;
+  optional double price = 7;
+  optional int32 stock = 8;
+  optional int64 category_id = 9;
+}
+
+message UpdateProductResponse {
+  bool success = 1;
+}
+
+message AddProductRequest {
+  string name = 1;
+  string description = 2;
+  string detail = 3;
+  string main_image = 4;
+  string thumbnail = 5;
+  double price = 6;
+  int32 stock = 7;
+  int64 category_id = 8;
+  bool is_banner = 9;
+}
+
+message AddProductResponse {
+  int64 id = 1;
+}
+
+message ListBannerProductsRequest {
+  int32 limit = 1;
+}
+
+message ListBannerProductsResponse {
+  repeated Product products = 1;
+}
+
+message ListRecommendedProductsRequest {
+  int32 limit = 1;
+}
+
+message ListRecommendedProductsResponse {
+  repeated Product products = 1;
+}
+
+service ProductRpc {
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
+  rpc GetProductDetail(GetProductDetailRequest) returns (GetProductDetailResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+  rpc AddProduct(AddProductRequest) returns (AddProductResponse);
+  rpc ListBannerProducts(ListBannerProductsRequest) returns (ListBannerProductsResponse);
+  rpc ListRecommendedProducts(ListRecommendedProductsRequest) returns (ListRecommendedProductsResponse);
+}
