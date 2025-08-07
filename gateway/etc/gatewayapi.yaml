@@ -1,0 +1,8 @@
+Name: gateway
+Host: 0.0.0.0
+Port: 8080
+UserRpc:
+  Target: 127.0.0.1:9081
+Jwt:
+  AccessSecret: your-secret-key
+  AccessExpire: 604800

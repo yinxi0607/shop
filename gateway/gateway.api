@@ -1,0 +1,33 @@
+syntax = "v1"
+
+type RegisterRequest {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+}
+
+type RegisterResponse {
+	UserID int64 `json:"user_id"`
+}
+
+type LoginRequest {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type LoginResponse {
+	Token string `json:"token"`
+}
+
+@server (
+	group:      user
+	middleware: Jwt
+)
+service GatewayAPI {
+	@handler Register
+	post /user/register (RegisterRequest) returns (RegisterResponse)
+
+	@handler Login
+	post /user/login (LoginRequest) returns (LoginResponse)
+}
+
