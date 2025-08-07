@@ -4,6 +4,9 @@ type RegisterRequest {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
+	Avatar   string `json:"avatar,optional"`
+	Bio      string `json:"bio,optional"`
+	Address  string `json:"address,optional"`
 }
 
 type RegisterResponse {
@@ -19,9 +22,53 @@ type LoginResponse {
 	Token string `json:"token"`
 }
 
+type UserInfo {
+	ID       int64  `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
+	Bio      string `json:"bio"`
+	Address  string `json:"address"`
+}
+
+type GetUserInfoRequest {
+	UserID int64 `json:"user_id,optional"` // From JWT
+}
+
+type GetUserInfoResponse {
+	User UserInfo `json:"user"`
+}
+
+type ChangePasswordRequest {
+	UserID      int64  `json:"user_id,optional"` // From JWT
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
+}
+
+type ChangePasswordResponse {
+	Success bool `json:"success"`
+}
+
+type ChangeUsernameRequest {
+	UserID      int64  `json:"user_id,optional"` // From JWT
+	NewUsername string `json:"new_username"`
+}
+
+type ChangeUsernameResponse {
+	Success bool `json:"success"`
+}
+
+type ChangeAvatarRequest {
+	UserID    int64  `json:"user_id,optional"` // From JWT
+	NewAvatar string `json:"new_avatar"`
+}
+
+type ChangeAvatarResponse {
+	Success bool `json:"success"`
+}
+
 @server (
-	group:      user
-	middleware: Jwt
+	group: user
 )
 service GatewayAPI {
 	@handler Register
@@ -29,5 +76,23 @@ service GatewayAPI {
 
 	@handler Login
 	post /user/login (LoginRequest) returns (LoginResponse)
+}
+
+@server (
+	group:      user
+	middleware: Jwt
+)
+service GatewayAPI {
+	@handler GetUserInfo
+	get /user/info (GetUserInfoRequest) returns (GetUserInfoResponse)
+
+	@handler ChangePassword
+	post /user/change-password (ChangePasswordRequest) returns (ChangePasswordResponse)
+
+	@handler ChangeUsername
+	post /user/change-username (ChangeUsernameRequest) returns (ChangeUsernameResponse)
+
+	@handler ChangeAvatar
+	post /user/change-avatar (ChangeAvatarRequest) returns (ChangeAvatarResponse)
 }
 

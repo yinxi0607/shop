@@ -8,6 +8,9 @@ message RegisterRequest {
   string username = 1;
   string password = 2;
   string email = 3;
+  string avatar = 4;
+  string bio = 5;
+  string address = 6;
 }
 
 message RegisterResponse {
@@ -23,7 +26,56 @@ message LoginResponse {
   string token = 1;
 }
 
+message GetUserInfoRequest {
+  int64 user_id = 1;
+}
+
+message UserInfo {
+  int64 id = 1;
+  string username = 2;
+  string email = 3;
+  string avatar = 4;
+  string bio = 5;
+  string address = 6;
+}
+
+message GetUserInfoResponse {
+  UserInfo user = 1;
+}
+
+message ChangePasswordRequest {
+  int64 user_id = 1;
+  string old_password = 2;
+  string new_password = 3;
+}
+
+message ChangePasswordResponse {
+  bool success = 1;
+}
+
+message ChangeUsernameRequest {
+  int64 user_id = 1;
+  string new_username = 2;
+}
+
+message ChangeUsernameResponse {
+  bool success = 1;
+}
+
+message ChangeAvatarRequest {
+  int64 user_id = 1;
+  string new_avatar = 2;
+}
+
+message ChangeAvatarResponse {
+  bool success = 1;
+}
+
 service UserRpc {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
+  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
+  rpc ChangeUsername(ChangeUsernameRequest) returns (ChangeUsernameResponse);
+  rpc ChangeAvatar(ChangeAvatarRequest) returns (ChangeAvatarResponse);
 }

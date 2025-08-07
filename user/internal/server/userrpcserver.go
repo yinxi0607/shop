@@ -32,3 +32,23 @@ func (s *UserRpcServer) Login(ctx context.Context, in *user.LoginRequest) (*user
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }
+
+func (s *UserRpcServer) GetUserInfo(ctx context.Context, in *user.GetUserInfoRequest) (*user.GetUserInfoResponse, error) {
+	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
+	return l.GetUserInfo(in)
+}
+
+func (s *UserRpcServer) ChangePassword(ctx context.Context, in *user.ChangePasswordRequest) (*user.ChangePasswordResponse, error) {
+	l := logic.NewChangePasswordLogic(ctx, s.svcCtx)
+	return l.ChangePassword(in)
+}
+
+func (s *UserRpcServer) ChangeUsername(ctx context.Context, in *user.ChangeUsernameRequest) (*user.ChangeUsernameResponse, error) {
+	l := logic.NewChangeUsernameLogic(ctx, s.svcCtx)
+	return l.ChangeUsername(in)
+}
+
+func (s *UserRpcServer) ChangeAvatar(ctx context.Context, in *user.ChangeAvatarRequest) (*user.ChangeAvatarResponse, error) {
+	l := logic.NewChangeAvatarLogic(ctx, s.svcCtx)
+	return l.ChangeAvatar(in)
+}

@@ -6,3 +6,10 @@ UserRpc:
 Jwt:
   AccessSecret: your-secret-key
   AccessExpire: 604800
+Middleware:
+  RateLimit:
+    Enabled: true
+    Requests: 1000
+    Seconds: 60
+  Validator:
+    Enabled: true

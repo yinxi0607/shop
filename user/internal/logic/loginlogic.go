@@ -33,6 +33,10 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 		return nil, errors.New("user not found")
 	}
 
+	if u.DeletedAt.Valid {
+		return nil, errors.New("user has been deleted")
+	}
+
 	if err := bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(in.Password)); err != nil {
 		return nil, errors.New("invalid password")
 	}

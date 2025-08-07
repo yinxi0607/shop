@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
 	"shop/user/internal/svc"
@@ -40,6 +41,9 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 		Username:     in.Username,
 		PasswordHash: string(passwordHash),
 		Email:        in.Email,
+		Avatar:       in.Avatar,
+		Bio:          in.Bio,
+		Address:      sql.NullString{String: in.Address, Valid: in.Address != ""},
 	}
 	result, err := l.svcCtx.UserModel.Insert(l.ctx, u)
 	if err != nil {

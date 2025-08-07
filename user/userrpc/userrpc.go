@@ -14,14 +14,27 @@ import (
 )
 
 type (
-	LoginRequest     = user.LoginRequest
-	LoginResponse    = user.LoginResponse
-	RegisterRequest  = user.RegisterRequest
-	RegisterResponse = user.RegisterResponse
+	ChangeAvatarRequest    = user.ChangeAvatarRequest
+	ChangeAvatarResponse   = user.ChangeAvatarResponse
+	ChangePasswordRequest  = user.ChangePasswordRequest
+	ChangePasswordResponse = user.ChangePasswordResponse
+	ChangeUsernameRequest  = user.ChangeUsernameRequest
+	ChangeUsernameResponse = user.ChangeUsernameResponse
+	GetUserInfoRequest     = user.GetUserInfoRequest
+	GetUserInfoResponse    = user.GetUserInfoResponse
+	LoginRequest           = user.LoginRequest
+	LoginResponse          = user.LoginResponse
+	RegisterRequest        = user.RegisterRequest
+	RegisterResponse       = user.RegisterResponse
+	UserInfo               = user.UserInfo
 
 	UserRpc interface {
 		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 		Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+		GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error)
+		ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error)
+		ChangeUsername(ctx context.Context, in *ChangeUsernameRequest, opts ...grpc.CallOption) (*ChangeUsernameResponse, error)
+		ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error)
 	}
 
 	defaultUserRpc struct {
@@ -43,4 +56,24 @@ func (m *defaultUserRpc) Register(ctx context.Context, in *RegisterRequest, opts
 func (m *defaultUserRpc) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	client := user.NewUserRpcClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
+}
+
+func (m *defaultUserRpc) GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error) {
+	client := user.NewUserRpcClient(m.cli.Conn())
+	return client.GetUserInfo(ctx, in, opts...)
+}
+
+func (m *defaultUserRpc) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error) {
+	client := user.NewUserRpcClient(m.cli.Conn())
+	return client.ChangePassword(ctx, in, opts...)
+}
+
+func (m *defaultUserRpc) ChangeUsername(ctx context.Context, in *ChangeUsernameRequest, opts ...grpc.CallOption) (*ChangeUsernameResponse, error) {
+	client := user.NewUserRpcClient(m.cli.Conn())
+	return client.ChangeUsername(ctx, in, opts...)
+}
+
+func (m *defaultUserRpc) ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error) {
+	client := user.NewUserRpcClient(m.cli.Conn())
+	return client.ChangeAvatar(ctx, in, opts...)
 }

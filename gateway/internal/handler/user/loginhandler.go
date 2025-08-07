@@ -1,4 +1,4 @@
-package logic
+package user
 
 import (
 	"github.com/zeromicro/go-zero/rest/httpx"

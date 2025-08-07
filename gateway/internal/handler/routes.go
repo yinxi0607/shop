@@ -4,12 +4,10 @@
 package handler
 
 import (
-	"net/http"
-
-	user "shop/gateway/internal/handler/user"
-	"shop/gateway/internal/svc"
-
 	"github.com/zeromicro/go-zero/rest"
+	"net/http"
+	"shop/gateway/internal/handler/user"
+	"shop/gateway/internal/svc"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
@@ -24,6 +22,33 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/user/register",
 				Handler: user.RegisterHandler(serverCtx),
-			}},
+			},
+		},
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/change-avatar",
+				Handler: user.ChangeAvatarHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/change-password",
+				Handler: user.ChangePasswordHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/change-username",
+				Handler: user.ChangeUsernameHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/user/info",
+				Handler: user.GetUserInfoHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Jwt.AccessSecret),
 	)
 }

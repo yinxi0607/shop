@@ -3,6 +3,42 @@
 
 package types
 
+type ChangeAvatarRequest struct {
+	UserID    int64  `json:"user_id,optional"` // From JWT
+	NewAvatar string `json:"new_avatar"`
+}
+
+type ChangeAvatarResponse struct {
+	Success bool `json:"success"`
+}
+
+type ChangePasswordRequest struct {
+	UserID      int64  `json:"user_id,optional"` // From JWT
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
+}
+
+type ChangePasswordResponse struct {
+	Success bool `json:"success"`
+}
+
+type ChangeUsernameRequest struct {
+	UserID      int64  `json:"user_id,optional"` // From JWT
+	NewUsername string `json:"new_username"`
+}
+
+type ChangeUsernameResponse struct {
+	Success bool `json:"success"`
+}
+
+type GetUserInfoRequest struct {
+	UserID int64 `json:"user_id,optional"` // From JWT
+}
+
+type GetUserInfoResponse struct {
+	User UserInfo `json:"user"`
+}
+
 type LoginRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -16,8 +52,20 @@ type RegisterRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
+	Avatar   string `json:"avatar,optional"`
+	Bio      string `json:"bio,optional"`
+	Address  string `json:"address,optional"`
 }
 
 type RegisterResponse struct {
 	UserID int64 `json:"user_id"`
+}
+
+type UserInfo struct {
+	ID       int64  `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
+	Bio      string `json:"bio"`
+	Address  string `json:"address"`
 }
