@@ -37,6 +37,8 @@ message UserInfo {
   string avatar = 4;
   string bio = 5;
   string address = 6;
+  string create_at = 7;
+  string update_at = 8;
 }
 
 message GetUserInfoResponse {

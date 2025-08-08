@@ -1,4 +1,4 @@
-package logic
+package user
 
 import (
 	"context"
@@ -23,21 +23,23 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 	}
 }
 
-func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoRequest) (*types.GetUserInfoResponse, error) {
-	res, err := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &user.GetUserInfoRequest{
+func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoRequest) (resp *types.GetUserInfoResponse, err error) {
+	// 调用用户服务的 gRPC 接口
+	userResp, err := l.svcCtx.UserRpc.GetUserInfo(l.ctx, &user.GetUserInfoRequest{
 		UserId: req.UserID,
 	})
 	if err != nil {
+		logx.Errorf("GetUserInfoLogic: failed to call UserRpc.GetUserInfo: %v", err)
 		return nil, err
 	}
+
 	return &types.GetUserInfoResponse{
-		User: types.UserInfo{
-			ID:       res.User.Id,
-			Username: res.User.Username,
-			Email:    res.User.Email,
-			Avatar:   res.User.Avatar,
-			Bio:      res.User.Bio,
-			Address:  res.User.Address,
-		},
+		UserID:    userResp.User.Id,
+		Username:  userResp.User.Username,
+		Email:     userResp.User.Email,
+		Avatar:    userResp.User.Avatar,
+		Bio:       userResp.User.Bio,
+		Address:   userResp.User.Address,
+		CreatedAt: userResp.User.CreateAt,
 	}, nil
 }

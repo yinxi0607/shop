@@ -1,0 +1,109 @@
+syntax = "v1"
+
+type Product {
+    ID int64 `json:"id"`
+    Name string `json:"name"`
+    Description string `json:"description"`
+    Detail string `json:"detail"`
+    MainImage string `json:"main_image"`
+    Thumbnail string `json:"thumbnail"`
+    Price float64 `json:"price"`
+    Stock int32 `json:"stock"`
+    CategoryID int64 `json:"category_id"`
+    CreatedAt string `json:"created_at"`
+    UpdatedAt string `json:"updated_at"`
+}
+
+type ListProductsRequest {
+    Page int32 `json:"page" default:"1"`
+    PageSize int32 `json:"page_size" default:"10"`
+    CategoryID int64 `json:"category_id,optional"`
+    MinPrice float64 `json:"min_price,optional"`
+    MaxPrice float64 `json:"max_price,optional"`
+}
+
+type ListProductsResponse {
+    Products []Product `json:"products"`
+    Total int32 `json:"total"`
+}
+
+type GetProductDetailRequest {
+    ID int64 `json:"id"`
+}
+
+type GetProductDetailResponse {
+    Product Product `json:"product"`
+}
+
+type UpdateProductRequest {
+    ID int64 `json:"id"`
+    Name string `json:"name,optional"`
+    Description string `json:"description,optional"`
+    Detail string `json:"detail,optional"`
+    MainImage string `json:"main_image,optional"`
+    Thumbnail string `json:"thumbnail,optional"`
+    Price float64 `json:"price,optional"`
+    Stock int32 `json:"stock,optional"`
+    CategoryID int64 `json:"category_id,optional"`
+}
+
+type UpdateProductResponse {
+    Success bool `json:"success"`
+}
+
+type AddProductRequest {
+    Name string `json:"name"`
+    Description string `json:"description,optional"`
+    Detail string `json:"detail,optional"`
+    MainImage string `json:"main_image,optional"`
+    Thumbnail string `json:"thumbnail,optional"`
+    Price float64 `json:"price"`
+    Stock int32 `json:"stock"`
+    CategoryID int64 `json:"category_id"`
+    IsBanner bool `json:"is_banner,optional"`
+}
+
+type AddProductResponse {
+    ID int64 `json:"id"`
+}
+
+type ListBannerProductsRequest {
+    Limit int32 `json:"limit" default:"5"`
+}
+
+type ListBannerProductsResponse {
+    Products []Product `json:"products"`
+}
+
+type ListRecommendedProductsRequest {
+    Limit int32 `json:"limit" default:"5"`
+}
+
+type ListRecommendedProductsResponse {
+    Products []Product `json:"products"`
+}
+
+@server(
+    group: product
+)
+service GatewayAPI {
+    @handler ListProducts
+    get /product/list (ListProductsRequest) returns (ListProductsResponse)
+    @handler GetProductDetail
+    get /product/detail (GetProductDetailRequest) returns (GetProductDetailResponse)
+    @handler ListBannerProducts
+    get /product/banner (ListBannerProductsRequest) returns (ListBannerProductsResponse)
+    @handler ListRecommendedProducts
+    get /product/recommended (ListRecommendedProductsRequest) returns (ListRecommendedProductsResponse)
+}
+
+@server(
+    group: product
+    middleware: Jwt
+)
+service GatewayAPI {
+    @handler UpdateProduct
+    post /product/update (UpdateProductRequest) returns (UpdateProductResponse)
+    @handler AddProduct
+    post /product/add (AddProductRequest) returns (AddProductResponse)
+}

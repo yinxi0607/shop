@@ -1,4 +1,4 @@
-package logic
+package user
 
 import (
 	"context"
@@ -23,14 +23,19 @@ func NewChangePasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ch
 	}
 }
 
-func (l *ChangePasswordLogic) ChangePassword(req *types.ChangePasswordRequest) (*types.ChangePasswordResponse, error) {
-	res, err := l.svcCtx.UserRpc.ChangePassword(l.ctx, &user.ChangePasswordRequest{
+func (l *ChangePasswordLogic) ChangePassword(req *types.ChangePasswordRequest) (resp *types.ChangePasswordResponse, err error) {
+	// 调用用户服务的 gRPC 接口
+	_, err = l.svcCtx.UserRpc.ChangePassword(l.ctx, &user.ChangePasswordRequest{
 		UserId:      req.UserID,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
 	})
 	if err != nil {
+		logx.Errorf("ChangePasswordLogic: failed to call UserRpc.ChangePassword: %v", err)
 		return nil, err
 	}
-	return &types.ChangePasswordResponse{Success: res.Success}, nil
+
+	return &types.ChangePasswordResponse{
+		Success: true,
+	}, nil
 }

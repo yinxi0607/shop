@@ -3,8 +3,24 @@
 
 package types
 
+type AddProductRequest struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description,optional"`
+	Detail      string  `json:"detail,optional"`
+	MainImage   string  `json:"main_image,optional"`
+	Thumbnail   string  `json:"thumbnail,optional"`
+	Price       float64 `json:"price"`
+	Stock       int32   `json:"stock"`
+	CategoryID  int64   `json:"category_id"`
+	IsBanner    bool    `json:"is_banner,optional"`
+}
+
+type AddProductResponse struct {
+	ID int64 `json:"id"`
+}
+
 type ChangeAvatarRequest struct {
-	UserID    int64  `json:"user_id,optional"` // From JWT
+	UserID    int64  `json:"user_id,optional"` // Populated from JWT
 	NewAvatar string `json:"new_avatar"`
 }
 
@@ -13,7 +29,7 @@ type ChangeAvatarResponse struct {
 }
 
 type ChangePasswordRequest struct {
-	UserID      int64  `json:"user_id,optional"` // From JWT
+	UserID      int64  `json:"user_id,optional"` // Populated from JWT
 	OldPassword string `json:"old_password"`
 	NewPassword string `json:"new_password"`
 }
@@ -23,7 +39,7 @@ type ChangePasswordResponse struct {
 }
 
 type ChangeUsernameRequest struct {
-	UserID      int64  `json:"user_id,optional"` // From JWT
+	UserID      int64  `json:"user_id,optional"` // Populated from JWT
 	NewUsername string `json:"new_username"`
 }
 
@@ -31,12 +47,55 @@ type ChangeUsernameResponse struct {
 	Success bool `json:"success"`
 }
 
+type GetProductDetailRequest struct {
+	ID int64 `json:"id"`
+}
+
+type GetProductDetailResponse struct {
+	Product Product `json:"product"`
+}
+
 type GetUserInfoRequest struct {
-	UserID int64 `json:"user_id,optional"` // From JWT
+	UserID int64 `json:"user_id,optional"` // Populated from JWT
 }
 
 type GetUserInfoResponse struct {
-	User UserInfo `json:"user"`
+	UserID    int64  `json:"user_id"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Avatar    string `json:"avatar"`
+	Bio       string `json:"bio"`
+	Address   string `json:"address"`
+	CreatedAt string `json:"created_at"`
+}
+
+type ListBannerProductsRequest struct {
+	Limit int32 `json:"limit" default:"5"`
+}
+
+type ListBannerProductsResponse struct {
+	Products []Product `json:"products"`
+}
+
+type ListProductsRequest struct {
+	Page       int32    `json:"page,optional" default:"1"`
+	PageSize   int32    `json:"page_size,optional" default:"10"`
+	CategoryID *int64   `json:"category_id,optional"`
+	MinPrice   *float64 `json:"min_price,optional"`
+	MaxPrice   *float64 `json:"max_price,optional"`
+}
+
+type ListProductsResponse struct {
+	Products []Product `json:"products"`
+	Total    int32     `json:"total"`
+}
+
+type ListRecommendedProductsRequest struct {
+	Limit int32 `json:"limit" default:"5"`
+}
+
+type ListRecommendedProductsResponse struct {
+	Products []Product `json:"products"`
 }
 
 type LoginRequest struct {
@@ -46,6 +105,20 @@ type LoginRequest struct {
 
 type LoginResponse struct {
 	Token string `json:"token"`
+}
+
+type Product struct {
+	ID          int64   `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Detail      string  `json:"detail"`
+	MainImage   string  `json:"main_image"`
+	Thumbnail   string  `json:"thumbnail"`
+	Price       float64 `json:"price"`
+	Stock       int32   `json:"stock"`
+	CategoryID  int64   `json:"category_id"`
+	CreatedAt   string  `json:"created_at"`
+	UpdatedAt   string  `json:"updated_at"`
 }
 
 type RegisterRequest struct {
@@ -61,11 +134,18 @@ type RegisterResponse struct {
 	UserID int64 `json:"user_id"`
 }
 
-type UserInfo struct {
-	ID       int64  `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Avatar   string `json:"avatar"`
-	Bio      string `json:"bio"`
-	Address  string `json:"address"`
+type UpdateProductRequest struct {
+	ID          int64   `json:"id"`
+	Name        string  `json:"name,optional"`
+	Description string  `json:"description,optional"`
+	Detail      string  `json:"detail,optional"`
+	MainImage   string  `json:"main_image,optional"`
+	Thumbnail   string  `json:"thumbnail,optional"`
+	Price       float64 `json:"price,optional"`
+	Stock       int32   `json:"stock,optional"`
+	CategoryID  int64   `json:"category_id,optional"`
+}
+
+type UpdateProductResponse struct {
+	Success bool `json:"success"`
 }

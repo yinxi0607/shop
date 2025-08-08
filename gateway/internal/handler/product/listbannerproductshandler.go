@@ -1,24 +1,24 @@
-package user
+package product
 
 import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"shop/gateway/internal/logic/user"
+	"shop/gateway/internal/logic/product"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
 )
 
-func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func ListBannerProductsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LoginRequest
+		var req types.ListBannerProductsRequest
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewLoginLogic(r.Context(), svcCtx)
-		resp, err := l.Login(&req)
+		l := product.NewListBannerProductsLogic(r.Context(), svcCtx)
+		resp, err := l.ListBannerProducts(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

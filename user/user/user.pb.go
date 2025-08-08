@@ -297,6 +297,8 @@ type UserInfo struct {
 	Avatar        string                 `protobuf:"bytes,4,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	Bio           string                 `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio,omitempty"`
 	Address       string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty"`
+	CreateAt      string                 `protobuf:"bytes,7,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
+	UpdateAt      string                 `protobuf:"bytes,8,opt,name=update_at,json=updateAt,proto3" json:"update_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -369,6 +371,20 @@ func (x *UserInfo) GetBio() string {
 func (x *UserInfo) GetAddress() string {
 	if x != nil {
 		return x.Address
+	}
+	return ""
+}
+
+func (x *UserInfo) GetCreateAt() string {
+	if x != nil {
+		return x.CreateAt
+	}
+	return ""
+}
+
+func (x *UserInfo) GetUpdateAt() string {
+	if x != nil {
+		return x.UpdateAt
 	}
 	return ""
 }
@@ -734,14 +750,16 @@ const file_user_proto_rawDesc = "" +
 	"\rLoginResponse\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\"-\n" +
 	"\x12GetUserInfoRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"\x90\x01\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"\xca\x01\n" +
 	"\bUserInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12\x16\n" +
 	"\x06avatar\x18\x04 \x01(\tR\x06avatar\x12\x10\n" +
 	"\x03bio\x18\x05 \x01(\tR\x03bio\x12\x18\n" +
-	"\aaddress\x18\x06 \x01(\tR\aaddress\"9\n" +
+	"\aaddress\x18\x06 \x01(\tR\aaddress\x12\x1b\n" +
+	"\tcreate_at\x18\a \x01(\tR\bcreateAt\x12\x1b\n" +
+	"\tupdate_at\x18\b \x01(\tR\bupdateAt\"9\n" +
 	"\x13GetUserInfoResponse\x12\"\n" +
 	"\x04user\x18\x01 \x01(\v2\x0e.user.UserInfoR\x04user\"v\n" +
 	"\x15ChangePasswordRequest\x12\x17\n" +

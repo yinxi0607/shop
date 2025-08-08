@@ -1,12 +1,11 @@
-package logic
+package user
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/logx"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
 	"shop/user/user"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type LoginLogic struct {
@@ -24,12 +23,17 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, err error) {
-	res, err := l.svcCtx.UserRpc.Login(l.ctx, &user.LoginRequest{
+	// 调用用户服务的 gRPC 接口
+	loginResp, err := l.svcCtx.UserRpc.Login(l.ctx, &user.LoginRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
 	if err != nil {
+		logx.Errorf("LoginLogic: failed to call UserRpc.Login: %v", err)
 		return nil, err
 	}
-	return &types.LoginResponse{Token: res.Token}, nil
+
+	return &types.LoginResponse{
+		Token: loginResp.Token,
+	}, nil
 }

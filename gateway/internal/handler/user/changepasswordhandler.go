@@ -6,7 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
-	logic "shop/gateway/internal/logic/user"
+	"shop/gateway/internal/logic/user"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
 )
@@ -19,15 +19,13 @@ func ChangePasswordHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		// Extract user_id from context as json.Number
+		// 从 JWT 获取 user_id
 		userID, ok := r.Context().Value("user_id").(json.Number)
 		if !ok {
 			logx.Errorf("ChangePasswordHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
 			httpx.Error(w, errors.New("invalid user_id in token"))
 			return
 		}
-
-		// Convert json.Number to int64
 		userIdInt64, err := userID.Int64()
 		if err != nil {
 			logx.Errorf("ChangePasswordHandler: failed to convert user_id %v to int64: %v", userID, err)
@@ -36,7 +34,7 @@ func ChangePasswordHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 		req.UserID = userIdInt64
 
-		l := logic.NewChangePasswordLogic(r.Context(), svcCtx)
+		l := user.NewChangePasswordLogic(r.Context(), svcCtx)
 		resp, err := l.ChangePassword(&req)
 		if err != nil {
 			httpx.Error(w, err)

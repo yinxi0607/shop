@@ -4,13 +4,57 @@
 package handler
 
 import (
-	"github.com/zeromicro/go-zero/rest"
 	"net/http"
-	"shop/gateway/internal/handler/user"
+
+	product "shop/gateway/internal/handler/product"
+	user "shop/gateway/internal/handler/user"
 	"shop/gateway/internal/svc"
+
+	"github.com/zeromicro/go-zero/rest"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/product/banner",
+				Handler: product.ListBannerProductsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/product/detail",
+				Handler: product.GetProductDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/product/list",
+				Handler: product.ListProductsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/product/recommended",
+				Handler: product.ListRecommendedProductsHandler(serverCtx),
+			},
+		},
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/product/add",
+				Handler: product.AddProductHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/product/update",
+				Handler: product.UpdateProductHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Jwt.AccessSecret),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{

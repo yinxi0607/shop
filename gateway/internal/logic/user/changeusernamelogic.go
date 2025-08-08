@@ -1,8 +1,7 @@
-package logic
+package user
 
 import (
 	"context"
-	"errors"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
 	"shop/user/user"
@@ -24,18 +23,18 @@ func NewChangeUsernameLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ch
 	}
 }
 
-func (l *ChangeUsernameLogic) ChangeUsername(req *types.ChangeUsernameRequest) (*types.ChangeUsernameResponse, error) {
-	// Input validation
-	if len(req.NewUsername) < 3 || len(req.NewUsername) > 50 {
-		return nil, errors.New("new username must be 3-50 characters")
-	}
-
-	res, err := l.svcCtx.UserRpc.ChangeUsername(l.ctx, &user.ChangeUsernameRequest{
+func (l *ChangeUsernameLogic) ChangeUsername(req *types.ChangeUsernameRequest) (resp *types.ChangeUsernameResponse, err error) {
+	// 调用用户服务的 gRPC 接口
+	_, err = l.svcCtx.UserRpc.ChangeUsername(l.ctx, &user.ChangeUsernameRequest{
 		UserId:      req.UserID,
 		NewUsername: req.NewUsername,
 	})
 	if err != nil {
+		logx.Errorf("ChangeUsernameLogic: failed to call UserRpc.ChangeUsername: %v", err)
 		return nil, err
 	}
-	return &types.ChangeUsernameResponse{Success: res.Success}, nil
+
+	return &types.ChangeUsernameResponse{
+		Success: true,
+	}, nil
 }

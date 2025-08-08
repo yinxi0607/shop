@@ -1,8 +1,15 @@
 Name: gateway
 Host: 0.0.0.0
 Port: 8080
+Redis:
+  Host: 127.0.0.1:6379
+  Pass: nU(8auUJZs6C
+  Key: user
 UserRpc:
   Target: 127.0.0.1:9081
+  NonBlock: true
+ProductRpc:
+  Target: 127.0.0.1:9082
 Jwt:
   AccessSecret: your-secret-key
   AccessExpire: 604800

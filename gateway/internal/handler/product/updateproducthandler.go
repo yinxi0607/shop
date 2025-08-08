@@ -1,4 +1,4 @@
-package user
+package product
 
 import (
 	"encoding/json"
@@ -6,39 +6,42 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
-	"shop/gateway/internal/logic/user"
+	"shop/gateway/internal/logic/product"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
 )
 
-func GetUserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func UpdateProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.GetUserInfoRequest
+		var req types.UpdateProductRequest
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
 		// 从 JWT 获取 user_id
-		userIDValue := r.Context().Value("user_id")
-		logx.Infof("GetUserInfoHandler: user_id=%v, type=%T", userIDValue, userIDValue)
-
 		userID, ok := r.Context().Value("user_id").(json.Number)
 		if !ok {
-			logx.Errorf("GetUserInfoHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
+			logx.Errorf("UpdateProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
 			httpx.Error(w, errors.New("invalid user_id in token"))
 			return
 		}
 		userIdInt64, err := userID.Int64()
 		if err != nil {
-			logx.Errorf("GetUserInfoHandler: failed to convert user_id %v to int64: %v", userID, err)
+			logx.Errorf("UpdateProductHandler: failed to convert user_id %v to int64: %v", userID, err)
 			httpx.Error(w, errors.New("failed to convert user_id to int64"))
 			return
 		}
-		req.UserID = userIdInt64
 
-		l := user.NewGetUserInfoLogic(r.Context(), svcCtx)
-		resp, err := l.GetUserInfo(&req)
+		// 管理员权限检查
+		if !isAdmin(userIdInt64) {
+			logx.Errorf("UpdateProductHandler: user_id %d is not admin", userIdInt64)
+			httpx.Error(w, errors.New("admin access required"))
+			return
+		}
+
+		l := product.NewUpdateProductLogic(r.Context(), svcCtx)
+		resp, err := l.UpdateProduct(&req)
 		if err != nil {
 			httpx.Error(w, err)
 			return
