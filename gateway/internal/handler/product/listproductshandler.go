@@ -15,6 +15,12 @@ func ListProductsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.Error(w, err)
 			return
 		}
+		if req.Page == 0 {
+			req.Page = 1
+		}
+		if req.PageSize == 0 {
+			req.PageSize = 10
+		}
 
 		l := product.NewListProductsLogic(r.Context(), svcCtx)
 		resp, err := l.ListProducts(&req)
