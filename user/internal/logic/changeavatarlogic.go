@@ -33,7 +33,7 @@ func (l *ChangeAvatarLogic) ChangeAvatar(req *user.ChangeAvatarRequest) (*user.C
 	}
 
 	// Find user
-	u, err := l.svcCtx.UserModel.FindOne(l.ctx, req.UserId)
+	u, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, req.UserId)
 	if err != nil {
 		return nil, errors.New("user not found")
 	}

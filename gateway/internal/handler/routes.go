@@ -76,17 +76,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 		[]rest.Route{
 			{
-				Method:  http.MethodPost,
+				Method:  http.MethodPut,
 				Path:    "/user/change-avatar",
 				Handler: user.ChangeAvatarHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPost,
+				Method:  http.MethodPut,
 				Path:    "/user/change-password",
 				Handler: user.ChangePasswordHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPost,
+				Method:  http.MethodPut,
 				Path:    "/user/change-username",
 				Handler: user.ChangeUsernameHandler(serverCtx),
 			},

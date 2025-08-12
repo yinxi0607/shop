@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"shop/user/internal/svc"
 	"shop/user/model"
@@ -36,7 +37,7 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 	if err != nil {
 		return nil, err
 	}
-
+	userId := uuid.New().String()
 	u := &model.Users{
 		Username:     in.Username,
 		PasswordHash: string(passwordHash),
@@ -44,16 +45,17 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 		Avatar:       in.Avatar,
 		Bio:          in.Bio,
 		Address:      sql.NullString{String: in.Address, Valid: in.Address != ""},
+		UserId:       userId,
 	}
 	result, err := l.svcCtx.UserModel.Insert(l.ctx, u)
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := result.LastInsertId()
+	_, err = result.LastInsertId()
 	if err != nil {
 		return nil, err
 	}
 
-	return &user.RegisterResponse{UserId: userID}, nil
+	return &user.RegisterResponse{UserId: userId}, nil
 }

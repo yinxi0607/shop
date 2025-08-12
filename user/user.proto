@@ -14,7 +14,7 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-  int64 user_id = 1;
+  string user_id = 1;
 }
 
 message LoginRequest {
@@ -27,7 +27,7 @@ message LoginResponse {
 }
 
 message GetUserInfoRequest {
-  int64 user_id = 1;
+  string user_id = 1;
 }
 
 message UserInfo {
@@ -39,6 +39,7 @@ message UserInfo {
   string address = 6;
   string create_at = 7;
   string update_at = 8;
+  string user_id = 9;
 }
 
 message GetUserInfoResponse {
@@ -46,7 +47,7 @@ message GetUserInfoResponse {
 }
 
 message ChangePasswordRequest {
-  int64 user_id = 1;
+  string user_id = 1;
   string old_password = 2;
   string new_password = 3;
 }
@@ -56,7 +57,7 @@ message ChangePasswordResponse {
 }
 
 message ChangeUsernameRequest {
-  int64 user_id = 1;
+  string user_id = 1;
   string new_username = 2;
 }
 
@@ -65,7 +66,7 @@ message ChangeUsernameResponse {
 }
 
 message ChangeAvatarRequest {
-  int64 user_id = 1;
+  string user_id = 1;
   string new_avatar = 2;
 }
 

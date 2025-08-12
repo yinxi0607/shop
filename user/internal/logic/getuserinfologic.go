@@ -24,7 +24,7 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(req *user.GetUserInfoRequest) (*user.GetUserInfoResponse, error) {
-	u, err := l.svcCtx.UserModel.FindOne(l.ctx, req.UserId)
+	u, err := l.svcCtx.UserModel.FindOneByUserId(l.ctx, req.UserId)
 	if err != nil {
 		return nil, errors.New("user not found")
 	}
