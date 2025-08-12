@@ -20,3 +20,4 @@ Middleware:
     Seconds: 60
   Validator:
     Enabled: true
+AdminUser: 3

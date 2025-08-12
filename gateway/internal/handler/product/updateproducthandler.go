@@ -34,7 +34,7 @@ func UpdateProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		// 管理员权限检查
-		if !isAdmin(userIdInt64) {
+		if !isAdmin(userIdInt64, svcCtx.Config.AdminUser) {
 			logx.Errorf("UpdateProductHandler: user_id %d is not admin", userIdInt64)
 			httpx.Error(w, errors.New("admin access required"))
 			return
