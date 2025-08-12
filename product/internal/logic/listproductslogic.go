@@ -37,15 +37,15 @@ func (l *ListProductsLogic) ListProducts(req *product.ListProductsRequest) (*pro
 	}
 
 	// Query database
-	var categoryId *int64
+	var categoryId *string
 	var minPrice, maxPrice *float64
-	if req.CategoryId != nil {
+	if req.CategoryId != nil && *req.CategoryId != "" {
 		categoryId = req.CategoryId
 	}
-	if req.MinPrice != nil {
+	if req.MinPrice != nil && *req.MinPrice != 0 {
 		minPrice = req.MinPrice
 	}
-	if req.MaxPrice != nil {
+	if req.MaxPrice != nil && *req.MaxPrice != 0 {
 		maxPrice = req.MaxPrice
 	}
 
@@ -57,7 +57,8 @@ func (l *ListProductsLogic) ListProducts(req *product.ListProductsRequest) (*pro
 	resp := &product.ListProductsResponse{Total: total}
 	for _, p := range products {
 		resp.Products = append(resp.Products, &product.Product{
-			Id:          p.Id,
+			//Id:          p.Id.Int64,
+			Pid:         p.Pid,
 			Name:        p.Name,
 			Description: p.Description,
 			Detail:      p.Detail.String,

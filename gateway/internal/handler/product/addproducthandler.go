@@ -52,5 +52,5 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 }
 
 func isAdmin(userID int64) bool {
-	return userID == 1 // Replace with actual role check (e.g., query users.role)
+	return userID == 3 // Replace with actual role check (e.g., query users.role)
 }

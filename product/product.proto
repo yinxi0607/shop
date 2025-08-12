@@ -13,15 +13,16 @@ message Product {
   string thumbnail = 6;
   double price = 7;
   int32 stock = 8;
-  int64 category_id = 9;
+  string category_id = 9;
   string created_at = 10;
   string updated_at = 11;
+  string pid = 12;
 }
 
 message ListProductsRequest {
   int32 page = 1;
   int32 page_size = 2;
-  optional int64 category_id = 3;
+  optional string category_id = 3;
   optional double min_price = 4;
   optional double max_price = 5;
 }
@@ -32,7 +33,7 @@ message ListProductsResponse {
 }
 
 message GetProductDetailRequest {
-  int64 id = 1;
+  string pid = 1;
 }
 
 message GetProductDetailResponse {
@@ -40,7 +41,7 @@ message GetProductDetailResponse {
 }
 
 message UpdateProductRequest {
-  int64 id = 1;
+  string pid = 1;
   optional string name = 2;
   optional string description = 3;
   optional string detail = 4;
@@ -48,7 +49,7 @@ message UpdateProductRequest {
   optional string thumbnail = 6;
   optional double price = 7;
   optional int32 stock = 8;
-  optional int64 category_id = 9;
+  optional string category_id = 9;
 }
 
 message UpdateProductResponse {
@@ -63,12 +64,13 @@ message AddProductRequest {
   string thumbnail = 5;
   double price = 6;
   int32 stock = 7;
-  int64 category_id = 8;
+  string category_id = 8;
   bool is_banner = 9;
+  string pid = 10;
 }
 
 message AddProductResponse {
-  int64 id = 1;
+  string pid = 1;
 }
 
 message ListBannerProductsRequest {

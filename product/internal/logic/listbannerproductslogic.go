@@ -45,7 +45,7 @@ func (l *ListBannerProductsLogic) ListBannerProducts(req *product.ListBannerProd
 	resp := &product.ListBannerProductsResponse{}
 	for _, p := range products {
 		resp.Products = append(resp.Products, &product.Product{
-			Id:          p.Id,
+			Pid:         p.Pid,
 			Name:        p.Name,
 			Description: p.Description,
 			Detail:      p.Detail.String,

@@ -27,7 +27,7 @@ func NewUpdateProductLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 
 func (l *UpdateProductLogic) UpdateProduct(req *product.UpdateProductRequest) (*product.UpdateProductResponse, error) {
 	// Find existing product
-	p, err := l.svcCtx.ProductModel.FindOne(l.ctx, req.Id)
+	p, err := l.svcCtx.ProductModel.FindOne(l.ctx, req.Pid)
 	if err != nil {
 		return nil, errors.New("product not found")
 	}
@@ -36,43 +36,46 @@ func (l *UpdateProductLogic) UpdateProduct(req *product.UpdateProductRequest) (*
 	}
 
 	// Update fields if provided
-	if req.Name != nil {
+	if req.Name != nil && *req.Name != "" {
 		p.Name = *req.Name
 	}
-	if req.Description != nil {
+	if req.Description != nil && *req.Description != "" {
 		p.Description = *req.Description
 	}
-	if req.Detail != nil {
+	if req.Detail != nil && *req.Detail != "" {
 		//p.Detail = *req.Detail
 		p.Detail = sql.NullString{
 			String: *req.Detail,
 			Valid:  *req.Detail != "",
 		}
 	}
-	if req.MainImage != nil {
+	if req.MainImage != nil && *req.MainImage != "" {
 		p.MainImage = *req.MainImage
 	}
-	if req.Thumbnail != nil {
+	if req.Thumbnail != nil && *req.Thumbnail != "" {
 		p.Thumbnail = *req.Thumbnail
 	}
-	if req.Price != nil {
+	if req.Price != nil && *req.Price != 0 {
 		p.Price = *req.Price
 	}
-	if req.Stock != nil {
+	if req.Stock != nil && *req.Stock != 0 {
 		p.Stock = int64(*req.Stock)
 	}
-	if req.CategoryId != nil {
+	if req.CategoryId != nil && *req.CategoryId != "" {
 		p.CategoryId = *req.CategoryId
 	}
 
 	// Update database
-	if _, err := l.svcCtx.ProductModel.Update(l.ctx, p); err != nil {
+	if err = l.svcCtx.ProductModel.Update(l.ctx, p); err != nil {
 		return nil, err
 	}
 
 	// Invalidate cache
-	cacheKey := fmt.Sprintf("product:%d", req.Id)
-	l.svcCtx.Redis.DelCtx(l.ctx, cacheKey)
+	cacheKey := fmt.Sprintf("product:%s", req.Pid)
+	_, err = l.svcCtx.Redis.DelCtx(l.ctx, cacheKey)
+	if err != nil {
+		return nil, err
+	}
 
 	return &product.UpdateProductResponse{Success: true}, nil
 }

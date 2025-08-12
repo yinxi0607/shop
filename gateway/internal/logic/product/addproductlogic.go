@@ -35,6 +35,7 @@ func (l *AddProductLogic) AddProduct(req *types.AddProductRequest) (resp *types.
 		Stock:       req.Stock,
 		CategoryId:  req.CategoryID,
 		IsBanner:    req.IsBanner,
+		Pid:         req.Pid,
 	})
 	if err != nil {
 		logx.Errorf("AddProductLogic: failed to call ProductRpc.AddProduct: %v", err)
@@ -42,6 +43,6 @@ func (l *AddProductLogic) AddProduct(req *types.AddProductRequest) (resp *types.
 	}
 
 	return &types.AddProductResponse{
-		ID: productResp.Id,
+		Pid: productResp.Pid,
 	}, nil
 }

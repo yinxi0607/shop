@@ -37,6 +37,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: product.ListRecommendedProductsHandler(serverCtx),
 			},
 		},
+		rest.WithPrefix("/api/v1/"),
 	)
 
 	server.AddRoutes(
@@ -47,12 +48,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: product.AddProductHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPost,
+				Method:  http.MethodPut,
 				Path:    "/product/update",
 				Handler: product.UpdateProductHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Jwt.AccessSecret),
+		rest.WithPrefix("/api/v1/"),
 	)
 
 	server.AddRoutes(
@@ -71,6 +73,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
+
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
@@ -94,5 +97,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Jwt.AccessSecret),
+		rest.WithPrefix("/api/v1/"),
 	)
 }

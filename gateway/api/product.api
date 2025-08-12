@@ -1,7 +1,7 @@
 syntax = "v1"
 
 type Product {
-    ID int64 `json:"id"`
+    Pid string `json:"pid"`
     Name string `json:"name"`
     Description string `json:"description"`
     Detail string `json:"detail"`
@@ -9,7 +9,7 @@ type Product {
     Thumbnail string `json:"thumbnail"`
     Price float64 `json:"price"`
     Stock int32 `json:"stock"`
-    CategoryID int64 `json:"category_id"`
+    CategoryID string `json:"category_id"`
     CreatedAt string `json:"created_at"`
     UpdatedAt string `json:"updated_at"`
 }
@@ -17,7 +17,7 @@ type Product {
 type ListProductsRequest {
     Page int32 `json:"page" default:"1"`
     PageSize int32 `json:"page_size" default:"10"`
-    CategoryID int64 `json:"category_id,optional"`
+    CategoryID string `json:"category_id,optional"`
     MinPrice float64 `json:"min_price,optional"`
     MaxPrice float64 `json:"max_price,optional"`
 }
@@ -28,7 +28,7 @@ type ListProductsResponse {
 }
 
 type GetProductDetailRequest {
-    ID int64 `json:"id"`
+    Pid string `json:"pid"`
 }
 
 type GetProductDetailResponse {
@@ -36,7 +36,7 @@ type GetProductDetailResponse {
 }
 
 type UpdateProductRequest {
-    ID int64 `json:"id"`
+    Pid string `json:"pid"`
     Name string `json:"name,optional"`
     Description string `json:"description,optional"`
     Detail string `json:"detail,optional"`
@@ -44,7 +44,7 @@ type UpdateProductRequest {
     Thumbnail string `json:"thumbnail,optional"`
     Price float64 `json:"price,optional"`
     Stock int32 `json:"stock,optional"`
-    CategoryID int64 `json:"category_id,optional"`
+    CategoryID string `json:"category_id,optional"`
 }
 
 type UpdateProductResponse {
@@ -59,12 +59,13 @@ type AddProductRequest {
     Thumbnail string `json:"thumbnail,optional"`
     Price float64 `json:"price"`
     Stock int32 `json:"stock"`
-    CategoryID int64 `json:"category_id"`
+    CategoryID string `json:"category_id"`
     IsBanner bool `json:"is_banner,optional"`
+    Pid string `json:"pid"`
 }
 
 type AddProductResponse {
-    ID int64 `json:"id"`
+    Pid string `json:"pid"`
 }
 
 type ListBannerProductsRequest {

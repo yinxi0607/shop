@@ -45,7 +45,7 @@ func (l *ListRecommendedProductsLogic) ListRecommendedProducts(req *product.List
 	resp := &product.ListRecommendedProductsResponse{}
 	for _, p := range products {
 		resp.Products = append(resp.Products, &product.Product{
-			Id:          p.Id,
+			Pid:         p.Pid,
 			Name:        p.Name,
 			Description: p.Description,
 			Detail:      p.Detail.String,

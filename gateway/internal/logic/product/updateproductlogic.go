@@ -27,7 +27,7 @@ func NewUpdateProductLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 func (l *UpdateProductLogic) UpdateProduct(req *types.UpdateProductRequest) (resp *types.UpdateProductResponse, err error) {
 	// 调用商品服务的 gRPC 接口
 	_, err = l.svcCtx.ProductRpc.UpdateProduct(l.ctx, &product.UpdateProductRequest{
-		Id:          req.ID,
+		Pid:         req.Pid,
 		Name:        &req.Name,
 		Description: &req.Description,
 		Detail:      &req.Detail,
@@ -43,7 +43,7 @@ func (l *UpdateProductLogic) UpdateProduct(req *types.UpdateProductRequest) (res
 	}
 
 	// 失效 Redis 缓存
-	cacheKey := fmt.Sprintf("product:%d", req.ID)
+	cacheKey := fmt.Sprintf("product:%s", req.Pid)
 	_, err = l.svcCtx.Redis.Del(cacheKey)
 	if err != nil {
 		logx.Errorf("UpdateProductLogic: failed to delete cache %s: %v", cacheKey, err)

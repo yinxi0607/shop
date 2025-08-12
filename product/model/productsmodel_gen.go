@@ -19,17 +19,19 @@ import (
 var (
 	productsFieldNames          = builder.RawFieldNames(&Products{})
 	productsRows                = strings.Join(productsFieldNames, ",")
-	productsRowsExpectAutoSet   = strings.Join(stringx.Remove(productsFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	productsRowsWithPlaceHolder = strings.Join(stringx.Remove(productsFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	productsRowsExpectAutoSet   = strings.Join(stringx.Remove(productsFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	productsRowsWithPlaceHolder = strings.Join(stringx.Remove(productsFieldNames, "`pid`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 )
 
 type (
 	productsModel interface {
 		Insert(ctx context.Context, data *Products) (sql.Result, error)
-		FindOne(ctx context.Context, id int64) (*Products, error)
-		Update(ctx context.Context, data *Products) (sql.Result, error)
-		List(ctx context.Context, page, pageSize int32, categoryId *int64, minPrice, maxPrice *float64) ([]*Products, int32, error)
+		FindOne(ctx context.Context, pid string) (*Products, error)
+		FindOneById(ctx context.Context, id int64) (*Products, error)
+		Update(ctx context.Context, data *Products) error
 		ListBanner(ctx context.Context, limit int32) ([]*Products, error)
+		Delete(ctx context.Context, pid string) error
+		List(ctx context.Context, page, pageSize int32, categoryId *string, minPrice, maxPrice *float64) ([]*Products, int32, error)
 		ListRecommended(ctx context.Context, limit int32) ([]*Products, error)
 	}
 
@@ -39,7 +41,7 @@ type (
 	}
 
 	Products struct {
-		Id          int64          `db:"id"`
+		Pid         string         `db:"pid"`
 		Name        string         `db:"name"`
 		Description string         `db:"description"`
 		Detail      sql.NullString `db:"detail"`
@@ -47,11 +49,12 @@ type (
 		Thumbnail   string         `db:"thumbnail"`
 		Price       float64        `db:"price"`
 		Stock       int64          `db:"stock"`
-		CategoryId  int64          `db:"category_id"`
-		IsBanner    bool           `db:"is_banner"`
+		CategoryId  string         `db:"category_id"`
+		IsBanner    int64          `db:"is_banner"`
 		CreatedAt   time.Time      `db:"created_at"`
 		UpdatedAt   time.Time      `db:"updated_at"`
 		DeletedAt   sql.NullTime   `db:"deleted_at"`
+		Id          sql.NullInt64  `db:"id" sqlx:"-"`
 	}
 )
 
@@ -62,15 +65,29 @@ func newProductsModel(conn sqlx.SqlConn) *defaultProductsModel {
 	}
 }
 
-func (m *defaultProductsModel) Delete(ctx context.Context, id int64) error {
-	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
-	_, err := m.conn.ExecCtx(ctx, query, id)
+func (m *defaultProductsModel) Delete(ctx context.Context, pid string) error {
+	query := fmt.Sprintf("delete from %s where `pid` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, pid)
 	return err
 }
 
-func (m *defaultProductsModel) FindOne(ctx context.Context, id int64) (*Products, error) {
-	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", productsRows, m.table)
+func (m *defaultProductsModel) FindOne(ctx context.Context, pid string) (*Products, error) {
+	query := fmt.Sprintf("select %s from %s where `pid` = ? limit 1", productsRows, m.table)
 	var resp Products
+	err := m.conn.QueryRowCtx(ctx, &resp, query, pid)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlx.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultProductsModel) FindOneById(ctx context.Context, id int64) (*Products, error) {
+	var resp Products
+	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", productsRows, m.table)
 	err := m.conn.QueryRowCtx(ctx, &resp, query, id)
 	switch err {
 	case nil:
@@ -83,24 +100,35 @@ func (m *defaultProductsModel) FindOne(ctx context.Context, id int64) (*Products
 }
 
 func (m *defaultProductsModel) Insert(ctx context.Context, data *Products) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, productsRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Name, data.Description, data.Detail, data.MainImage, data.Thumbnail, data.Price, data.Stock, data.CategoryId, data.IsBanner, data.DeletedAt)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, productsRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.Pid, data.Name, data.Description, data.Detail, data.MainImage, data.Thumbnail, data.Price, data.Stock, data.CategoryId, data.IsBanner, data.DeletedAt, data.Id)
 	return ret, err
 }
 
-func (m *customProductsModel) Update(ctx context.Context, data *Products) (sql.Result, error) {
-	query := "UPDATE products SET name = ?, description = ?, detail = ?, main_image = ?, thumbnail = ?, price = ?, stock = ?, category_id = ? WHERE id = ? AND deleted_at IS NULL"
-	return m.conn.ExecCtx(ctx, query, data.Name, data.Description, data.Detail, data.MainImage, data.Thumbnail, data.Price, data.Stock, data.CategoryId, data.Id)
+func (m *defaultProductsModel) Update(ctx context.Context, newData *Products) error {
+	query := fmt.Sprintf("update %s set %s where `pid` = ?", m.table, productsRowsWithPlaceHolder)
+	_, err := m.conn.ExecCtx(ctx, query, newData.Name, newData.Description, newData.Detail, newData.MainImage, newData.Thumbnail, newData.Price, newData.Stock, newData.CategoryId, newData.IsBanner, newData.DeletedAt, newData.Id, newData.Pid)
+	return err
 }
 
 func (m *defaultProductsModel) tableName() string {
 	return m.table
 }
 
-func (m *defaultProductsModel) List(ctx context.Context, page, pageSize int32, categoryId *int64, minPrice, maxPrice *float64) ([]*Products, int32, error) {
+func (m *defaultProductsModel) ListBanner(ctx context.Context, limit int32) ([]*Products, error) {
+	var products []*Products
+	query := "SELECT pid, name, description, detail, main_image, thumbnail, price, stock, category_id, is_banner, created_at, updated_at, deleted_at,id FROM products WHERE is_banner = true AND deleted_at IS NULL LIMIT ?"
+	err := m.conn.QueryRowsCtx(ctx, &products, query, limit)
+	if err != nil {
+		return nil, err
+	}
+	return products, nil
+}
+
+func (m *customProductsModel) List(ctx context.Context, page, pageSize int32, categoryId *string, minPrice, maxPrice *float64) ([]*Products, int32, error) {
 	var products []*Products
 	var total int32
-	query := "SELECT id, name, description, detail, main_image, thumbnail, price, stock, category_id, is_banner, created_at, updated_at, deleted_at FROM products WHERE deleted_at IS NULL"
+	query := "SELECT pid, name, description, detail, main_image, thumbnail, price, stock, category_id, is_banner, created_at, updated_at, deleted_at,id FROM products WHERE deleted_at IS NULL"
 	countQuery := "SELECT COUNT(*) FROM products WHERE deleted_at IS NULL"
 	args := []interface{}{}
 
@@ -136,20 +164,10 @@ func (m *defaultProductsModel) List(ctx context.Context, page, pageSize int32, c
 	return products, total, nil
 }
 
-func (m *defaultProductsModel) ListBanner(ctx context.Context, limit int32) ([]*Products, error) {
-	var products []*Products
-	query := "SELECT id, name, description, detail, main_image, thumbnail, price, stock, category_id, is_banner, created_at, updated_at, deleted_at FROM products WHERE is_banner = true AND deleted_at IS NULL LIMIT ?"
-	err := m.conn.QueryRowsCtx(ctx, &products, query, limit)
-	if err != nil {
-		return nil, err
-	}
-	return products, nil
-}
-
-func (m *defaultProductsModel) ListRecommended(ctx context.Context, limit int32) ([]*Products, error) {
+func (m *customProductsModel) ListRecommended(ctx context.Context, limit int32) ([]*Products, error) {
 	var products []*Products
 	// Simple recommendation: order by stock (or sales_count if available)
-	query := "SELECT id, name, description, detail, main_image, thumbnail, price, stock, category_id, is_banner, created_at, updated_at, deleted_at FROM products WHERE deleted_at IS NULL ORDER BY stock DESC LIMIT ?"
+	query := "SELECT pid, name, description, detail, main_image, thumbnail, price, stock, category_id, is_banner, created_at, updated_at, deleted_at,id FROM products WHERE deleted_at IS NULL ORDER BY stock DESC LIMIT ?"
 	err := m.conn.QueryRowsCtx(ctx, &products, query, limit)
 	if err != nil {
 		return nil, err

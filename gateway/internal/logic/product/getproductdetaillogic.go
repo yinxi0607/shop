@@ -26,7 +26,7 @@ func NewGetProductDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *GetProductDetailLogic) GetProductDetail(req *types.GetProductDetailRequest) (resp *types.GetProductDetailResponse, err error) {
 	// 检查 Redis 缓存
-	cacheKey := fmt.Sprintf("product:%d", req.ID)
+	cacheKey := fmt.Sprintf("product:%s", req.Pid)
 	cached, err := l.svcCtx.Redis.GetCtx(l.ctx, cacheKey)
 	if err == nil && cached != "" {
 		var p types.Product
@@ -40,7 +40,7 @@ func (l *GetProductDetailLogic) GetProductDetail(req *types.GetProductDetailRequ
 
 	// 调用商品服务的 gRPC 接口
 	productResp, err := l.svcCtx.ProductRpc.GetProductDetail(l.ctx, &product.GetProductDetailRequest{
-		Id: req.ID,
+		Pid: req.Pid,
 	})
 	if err != nil {
 		logx.Errorf("GetProductDetailLogic: failed to call ProductRpc.GetProductDetail: %v", err)
@@ -49,7 +49,7 @@ func (l *GetProductDetailLogic) GetProductDetail(req *types.GetProductDetailRequ
 
 	// 转换 gRPC 响应
 	p := types.Product{
-		ID:          productResp.Product.Id,
+		Pid:         productResp.Product.Pid,
 		Name:        productResp.Product.Name,
 		Description: productResp.Product.Description,
 		Detail:      productResp.Product.Detail,

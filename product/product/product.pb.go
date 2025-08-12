@@ -31,9 +31,10 @@ type Product struct {
 	Thumbnail     string                 `protobuf:"bytes,6,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
 	Price         float64                `protobuf:"fixed64,7,opt,name=price,proto3" json:"price,omitempty"`
 	Stock         int32                  `protobuf:"varint,8,opt,name=stock,proto3" json:"stock,omitempty"`
-	CategoryId    int64                  `protobuf:"varint,9,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
+	CategoryId    string                 `protobuf:"bytes,9,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
 	CreatedAt     string                 `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     string                 `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Pid           string                 `protobuf:"bytes,12,opt,name=pid,proto3" json:"pid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -124,11 +125,11 @@ func (x *Product) GetStock() int32 {
 	return 0
 }
 
-func (x *Product) GetCategoryId() int64 {
+func (x *Product) GetCategoryId() string {
 	if x != nil {
 		return x.CategoryId
 	}
-	return 0
+	return ""
 }
 
 func (x *Product) GetCreatedAt() string {
@@ -145,11 +146,18 @@ func (x *Product) GetUpdatedAt() string {
 	return ""
 }
 
+func (x *Product) GetPid() string {
+	if x != nil {
+		return x.Pid
+	}
+	return ""
+}
+
 type ListProductsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
 	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	CategoryId    *int64                 `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
+	CategoryId    *string                `protobuf:"bytes,3,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
 	MinPrice      *float64               `protobuf:"fixed64,4,opt,name=min_price,json=minPrice,proto3,oneof" json:"min_price,omitempty"`
 	MaxPrice      *float64               `protobuf:"fixed64,5,opt,name=max_price,json=maxPrice,proto3,oneof" json:"max_price,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -200,11 +208,11 @@ func (x *ListProductsRequest) GetPageSize() int32 {
 	return 0
 }
 
-func (x *ListProductsRequest) GetCategoryId() int64 {
+func (x *ListProductsRequest) GetCategoryId() string {
 	if x != nil && x.CategoryId != nil {
 		return *x.CategoryId
 	}
-	return 0
+	return ""
 }
 
 func (x *ListProductsRequest) GetMinPrice() float64 {
@@ -275,7 +283,7 @@ func (x *ListProductsResponse) GetTotal() int32 {
 
 type GetProductDetailRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Pid           string                 `protobuf:"bytes,1,opt,name=pid,proto3" json:"pid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -310,11 +318,11 @@ func (*GetProductDetailRequest) Descriptor() ([]byte, []int) {
 	return file_product_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetProductDetailRequest) GetId() int64 {
+func (x *GetProductDetailRequest) GetPid() string {
 	if x != nil {
-		return x.Id
+		return x.Pid
 	}
-	return 0
+	return ""
 }
 
 type GetProductDetailResponse struct {
@@ -363,7 +371,7 @@ func (x *GetProductDetailResponse) GetProduct() *Product {
 
 type UpdateProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Pid           string                 `protobuf:"bytes,1,opt,name=pid,proto3" json:"pid,omitempty"`
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	Detail        *string                `protobuf:"bytes,4,opt,name=detail,proto3,oneof" json:"detail,omitempty"`
@@ -371,7 +379,7 @@ type UpdateProductRequest struct {
 	Thumbnail     *string                `protobuf:"bytes,6,opt,name=thumbnail,proto3,oneof" json:"thumbnail,omitempty"`
 	Price         *float64               `protobuf:"fixed64,7,opt,name=price,proto3,oneof" json:"price,omitempty"`
 	Stock         *int32                 `protobuf:"varint,8,opt,name=stock,proto3,oneof" json:"stock,omitempty"`
-	CategoryId    *int64                 `protobuf:"varint,9,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
+	CategoryId    *string                `protobuf:"bytes,9,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -406,11 +414,11 @@ func (*UpdateProductRequest) Descriptor() ([]byte, []int) {
 	return file_product_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *UpdateProductRequest) GetId() int64 {
+func (x *UpdateProductRequest) GetPid() string {
 	if x != nil {
-		return x.Id
+		return x.Pid
 	}
-	return 0
+	return ""
 }
 
 func (x *UpdateProductRequest) GetName() string {
@@ -462,11 +470,11 @@ func (x *UpdateProductRequest) GetStock() int32 {
 	return 0
 }
 
-func (x *UpdateProductRequest) GetCategoryId() int64 {
+func (x *UpdateProductRequest) GetCategoryId() string {
 	if x != nil && x.CategoryId != nil {
 		return *x.CategoryId
 	}
-	return 0
+	return ""
 }
 
 type UpdateProductResponse struct {
@@ -522,8 +530,9 @@ type AddProductRequest struct {
 	Thumbnail     string                 `protobuf:"bytes,5,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
 	Price         float64                `protobuf:"fixed64,6,opt,name=price,proto3" json:"price,omitempty"`
 	Stock         int32                  `protobuf:"varint,7,opt,name=stock,proto3" json:"stock,omitempty"`
-	CategoryId    int64                  `protobuf:"varint,8,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
+	CategoryId    string                 `protobuf:"bytes,8,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
 	IsBanner      bool                   `protobuf:"varint,9,opt,name=is_banner,json=isBanner,proto3" json:"is_banner,omitempty"`
+	Pid           string                 `protobuf:"bytes,10,opt,name=pid,proto3" json:"pid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -607,11 +616,11 @@ func (x *AddProductRequest) GetStock() int32 {
 	return 0
 }
 
-func (x *AddProductRequest) GetCategoryId() int64 {
+func (x *AddProductRequest) GetCategoryId() string {
 	if x != nil {
 		return x.CategoryId
 	}
-	return 0
+	return ""
 }
 
 func (x *AddProductRequest) GetIsBanner() bool {
@@ -621,9 +630,16 @@ func (x *AddProductRequest) GetIsBanner() bool {
 	return false
 }
 
+func (x *AddProductRequest) GetPid() string {
+	if x != nil {
+		return x.Pid
+	}
+	return ""
+}
+
 type AddProductResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Pid           string                 `protobuf:"bytes,1,opt,name=pid,proto3" json:"pid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -658,11 +674,11 @@ func (*AddProductResponse) Descriptor() ([]byte, []int) {
 	return file_product_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *AddProductResponse) GetId() int64 {
+func (x *AddProductResponse) GetPid() string {
 	if x != nil {
-		return x.Id
+		return x.Pid
 	}
-	return 0
+	return ""
 }
 
 type ListBannerProductsRequest struct {
@@ -845,7 +861,7 @@ var File_product_proto protoreflect.FileDescriptor
 
 const file_product_proto_rawDesc = "" +
 	"\n" +
-	"\rproduct.proto\x12\aproduct\"\xaf\x02\n" +
+	"\rproduct.proto\x12\aproduct\"\xc1\x02\n" +
 	"\aProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -856,17 +872,18 @@ const file_product_proto_rawDesc = "" +
 	"\tthumbnail\x18\x06 \x01(\tR\tthumbnail\x12\x14\n" +
 	"\x05price\x18\a \x01(\x01R\x05price\x12\x14\n" +
 	"\x05stock\x18\b \x01(\x05R\x05stock\x12\x1f\n" +
-	"\vcategory_id\x18\t \x01(\x03R\n" +
+	"\vcategory_id\x18\t \x01(\tR\n" +
 	"categoryId\x12\x1d\n" +
 	"\n" +
 	"created_at\x18\n" +
 	" \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\v \x01(\tR\tupdatedAt\"\xdc\x01\n" +
+	"updated_at\x18\v \x01(\tR\tupdatedAt\x12\x10\n" +
+	"\x03pid\x18\f \x01(\tR\x03pid\"\xdc\x01\n" +
 	"\x13ListProductsRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1b\n" +
 	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12$\n" +
-	"\vcategory_id\x18\x03 \x01(\x03H\x00R\n" +
+	"\vcategory_id\x18\x03 \x01(\tH\x00R\n" +
 	"categoryId\x88\x01\x01\x12 \n" +
 	"\tmin_price\x18\x04 \x01(\x01H\x01R\bminPrice\x88\x01\x01\x12 \n" +
 	"\tmax_price\x18\x05 \x01(\x01H\x02R\bmaxPrice\x88\x01\x01B\x0e\n" +
@@ -877,13 +894,13 @@ const file_product_proto_rawDesc = "" +
 	"_max_price\"Z\n" +
 	"\x14ListProductsResponse\x12,\n" +
 	"\bproducts\x18\x01 \x03(\v2\x10.product.ProductR\bproducts\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\")\n" +
-	"\x17GetProductDetailRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"F\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"+\n" +
+	"\x17GetProductDetailRequest\x12\x10\n" +
+	"\x03pid\x18\x01 \x01(\tR\x03pid\"F\n" +
 	"\x18GetProductDetailResponse\x12*\n" +
-	"\aproduct\x18\x01 \x01(\v2\x10.product.ProductR\aproduct\"\x8b\x03\n" +
-	"\x14UpdateProductRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
+	"\aproduct\x18\x01 \x01(\v2\x10.product.ProductR\aproduct\"\x8d\x03\n" +
+	"\x14UpdateProductRequest\x12\x10\n" +
+	"\x03pid\x18\x01 \x01(\tR\x03pid\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
 	"\vdescription\x18\x03 \x01(\tH\x01R\vdescription\x88\x01\x01\x12\x1b\n" +
 	"\x06detail\x18\x04 \x01(\tH\x02R\x06detail\x88\x01\x01\x12\"\n" +
@@ -892,7 +909,7 @@ const file_product_proto_rawDesc = "" +
 	"\tthumbnail\x18\x06 \x01(\tH\x04R\tthumbnail\x88\x01\x01\x12\x19\n" +
 	"\x05price\x18\a \x01(\x01H\x05R\x05price\x88\x01\x01\x12\x19\n" +
 	"\x05stock\x18\b \x01(\x05H\x06R\x05stock\x88\x01\x01\x12$\n" +
-	"\vcategory_id\x18\t \x01(\x03H\aR\n" +
+	"\vcategory_id\x18\t \x01(\tH\aR\n" +
 	"categoryId\x88\x01\x01B\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\t\n" +
@@ -904,7 +921,7 @@ const file_product_proto_rawDesc = "" +
 	"\x06_stockB\x0e\n" +
 	"\f_category_id\"1\n" +
 	"\x15UpdateProductResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x88\x02\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x9a\x02\n" +
 	"\x11AddProductRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x16\n" +
@@ -914,11 +931,13 @@ const file_product_proto_rawDesc = "" +
 	"\tthumbnail\x18\x05 \x01(\tR\tthumbnail\x12\x14\n" +
 	"\x05price\x18\x06 \x01(\x01R\x05price\x12\x14\n" +
 	"\x05stock\x18\a \x01(\x05R\x05stock\x12\x1f\n" +
-	"\vcategory_id\x18\b \x01(\x03R\n" +
+	"\vcategory_id\x18\b \x01(\tR\n" +
 	"categoryId\x12\x1b\n" +
-	"\tis_banner\x18\t \x01(\bR\bisBanner\"$\n" +
-	"\x12AddProductResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"1\n" +
+	"\tis_banner\x18\t \x01(\bR\bisBanner\x12\x10\n" +
+	"\x03pid\x18\n" +
+	" \x01(\tR\x03pid\"&\n" +
+	"\x12AddProductResponse\x12\x10\n" +
+	"\x03pid\x18\x01 \x01(\tR\x03pid\"1\n" +
 	"\x19ListBannerProductsRequest\x12\x14\n" +
 	"\x05limit\x18\x01 \x01(\x05R\x05limit\"J\n" +
 	"\x1aListBannerProductsResponse\x12,\n" +

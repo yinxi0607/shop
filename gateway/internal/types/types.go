@@ -11,12 +11,13 @@ type AddProductRequest struct {
 	Thumbnail   string  `json:"thumbnail,optional"`
 	Price       float64 `json:"price"`
 	Stock       int32   `json:"stock"`
-	CategoryID  int64   `json:"category_id"`
+	CategoryID  string  `json:"category_id"`
 	IsBanner    bool    `json:"is_banner,optional"`
+	Pid         string  `json:"pid"`
 }
 
 type AddProductResponse struct {
-	ID int64 `json:"id"`
+	Pid string `json:"pid"`
 }
 
 type ChangeAvatarRequest struct {
@@ -48,7 +49,7 @@ type ChangeUsernameResponse struct {
 }
 
 type GetProductDetailRequest struct {
-	ID int64 `json:"id"`
+	Pid string `form:"pid"`
 }
 
 type GetProductDetailResponse struct {
@@ -70,7 +71,7 @@ type GetUserInfoResponse struct {
 }
 
 type ListBannerProductsRequest struct {
-	Limit int32 `json:"limit" default:"5"`
+	Limit int32 `form:"limit" default:"5"`
 }
 
 type ListBannerProductsResponse struct {
@@ -78,11 +79,11 @@ type ListBannerProductsResponse struct {
 }
 
 type ListProductsRequest struct {
-	Page       int32    `json:"page,optional" default:"1"`
-	PageSize   int32    `json:"page_size,optional" default:"10"`
-	CategoryID *int64   `json:"category_id,optional"`
-	MinPrice   *float64 `json:"min_price,optional"`
-	MaxPrice   *float64 `json:"max_price,optional"`
+	Page       int32   `form:"page" default:"1"`
+	PageSize   int32   `form:"page_size" default:"10"`
+	CategoryID string  `form:"category_id,optional"`
+	MinPrice   float64 `form:"min_price,optional"`
+	MaxPrice   float64 `form:"max_price,optional"`
 }
 
 type ListProductsResponse struct {
@@ -91,7 +92,7 @@ type ListProductsResponse struct {
 }
 
 type ListRecommendedProductsRequest struct {
-	Limit int32 `json:"limit" default:"5"`
+	Limit int32 `form:"limit" default:"5"`
 }
 
 type ListRecommendedProductsResponse struct {
@@ -108,7 +109,7 @@ type LoginResponse struct {
 }
 
 type Product struct {
-	ID          int64   `json:"id"`
+	Pid         string  `json:"pid"`
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	Detail      string  `json:"detail"`
@@ -116,7 +117,7 @@ type Product struct {
 	Thumbnail   string  `json:"thumbnail"`
 	Price       float64 `json:"price"`
 	Stock       int32   `json:"stock"`
-	CategoryID  int64   `json:"category_id"`
+	CategoryID  string  `json:"category_id"`
 	CreatedAt   string  `json:"created_at"`
 	UpdatedAt   string  `json:"updated_at"`
 }
@@ -135,7 +136,7 @@ type RegisterResponse struct {
 }
 
 type UpdateProductRequest struct {
-	ID          int64   `json:"id"`
+	Pid         string  `json:"pid"`
 	Name        string  `json:"name,optional"`
 	Description string  `json:"description,optional"`
 	Detail      string  `json:"detail,optional"`
@@ -143,7 +144,7 @@ type UpdateProductRequest struct {
 	Thumbnail   string  `json:"thumbnail,optional"`
 	Price       float64 `json:"price,optional"`
 	Stock       int32   `json:"stock,optional"`
-	CategoryID  int64   `json:"category_id,optional"`
+	CategoryID  string  `json:"category_id,optional"`
 }
 
 type UpdateProductResponse struct {

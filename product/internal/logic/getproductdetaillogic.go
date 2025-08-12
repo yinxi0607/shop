@@ -27,7 +27,7 @@ func NewGetProductDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *GetProductDetailLogic) GetProductDetail(req *product.GetProductDetailRequest) (*product.GetProductDetailResponse, error) {
 	// Check Redis cache
-	cacheKey := fmt.Sprintf("product:%d", req.Id)
+	cacheKey := fmt.Sprintf("product:%s", req.Pid)
 	cached, err := l.svcCtx.Redis.GetCtx(l.ctx, cacheKey)
 	if err == nil {
 		var prod product.Product
@@ -37,14 +37,14 @@ func (l *GetProductDetailLogic) GetProductDetail(req *product.GetProductDetailRe
 	}
 
 	// Query database
-	p, err := l.svcCtx.ProductModel.FindOne(l.ctx, req.Id)
+	p, err := l.svcCtx.ProductModel.FindOne(l.ctx, req.Pid)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := &product.GetProductDetailResponse{
 		Product: &product.Product{
-			Id:          p.Id,
+			Pid:         p.Pid,
 			Name:        p.Name,
 			Description: p.Description,
 			Detail:      p.Detail.String,

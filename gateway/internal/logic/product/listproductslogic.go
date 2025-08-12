@@ -27,7 +27,7 @@ func NewListProductsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *List
 
 func (l *ListProductsLogic) ListProducts(req *types.ListProductsRequest) (resp *types.ListProductsResponse, err error) {
 	// 检查 Redis 缓存
-	cacheKey := fmt.Sprintf("products:page:%d:size:%d:cat:%d:min:%f:max:%f", req.Page, req.PageSize, req.CategoryID, req.MinPrice, req.MaxPrice)
+	cacheKey := fmt.Sprintf("products:page:%d:size:%d:cat:%s:min:%f:max:%f", req.Page, req.PageSize, req.CategoryID, req.MinPrice, req.MaxPrice)
 	cached, err := l.svcCtx.Redis.Get(cacheKey)
 	if err == nil && cached != "" {
 		var products []types.Product
@@ -43,9 +43,9 @@ func (l *ListProductsLogic) ListProducts(req *types.ListProductsRequest) (resp *
 	productResp, err := l.svcCtx.ProductRpc.ListProducts(l.ctx, &product.ListProductsRequest{
 		Page:       req.Page,
 		PageSize:   req.PageSize,
-		CategoryId: req.CategoryID,
-		MinPrice:   req.MinPrice,
-		MaxPrice:   req.MaxPrice,
+		CategoryId: &req.CategoryID,
+		MinPrice:   &req.MinPrice,
+		MaxPrice:   &req.MaxPrice,
 	})
 	if err != nil {
 		logx.Errorf("ListProductsLogic: failed to call ProductRpc.ListProducts: %v", err)
@@ -56,7 +56,7 @@ func (l *ListProductsLogic) ListProducts(req *types.ListProductsRequest) (resp *
 	products := make([]types.Product, len(productResp.Products))
 	for i, p := range productResp.Products {
 		products[i] = types.Product{
-			ID:          p.Id,
+			Pid:         p.Pid,
 			Name:        p.Name,
 			Description: p.Description,
 			Detail:      p.Detail,

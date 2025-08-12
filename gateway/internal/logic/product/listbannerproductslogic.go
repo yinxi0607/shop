@@ -51,7 +51,7 @@ func (l *ListBannerProductsLogic) ListBannerProducts(req *types.ListBannerProduc
 	products := make([]types.Product, len(productResp.Products))
 	for i, p := range productResp.Products {
 		products[i] = types.Product{
-			ID:          p.Id,
+			Pid:         p.Pid,
 			Name:        p.Name,
 			Description: p.Description,
 			Detail:      p.Detail,
