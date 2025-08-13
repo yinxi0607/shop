@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
 	"shop/gateway/common/response"
 	"strings"
@@ -23,6 +24,7 @@ func NewJwtMiddleware(secret string) *JwtMiddleware {
 
 func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		logx.Infof("JWTMiddleware.Handle")
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 			response.Fail(w, 1004, "missing or invalid Authorization header")
@@ -30,7 +32,7 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-
+		logx.Infof("tokenStr: %s", tokenStr)
 		// 解析 token
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 			// 确保 token 签名方法是 HMAC

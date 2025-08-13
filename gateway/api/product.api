@@ -106,7 +106,7 @@ service GatewayAPI {
 )
 service GatewayAPI {
     @handler UpdateProduct
-    post /product/update (UpdateProductRequest) returns (UpdateProductResponse)
+    put /product/update (UpdateProductRequest) returns (UpdateProductResponse)
     @handler AddProduct
     post /product/add (AddProductRequest) returns (AddProductResponse)
 }

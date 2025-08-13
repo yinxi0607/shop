@@ -2,6 +2,7 @@ package product
 
 import (
 	"net/http"
+	"shop/gateway/common/response"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"shop/gateway/internal/logic/product"
@@ -13,16 +14,16 @@ func GetProductDetailHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.GetProductDetailRequest
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.Fail(w, 1000, err.Error())
 			return
 		}
 
 		l := product.NewGetProductDetailLogic(r.Context(), svcCtx)
 		resp, err := l.GetProductDetail(&req)
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.Fail(w, 1000, err.Error())
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			response.Success(w, resp)
 		}
 	}
 }

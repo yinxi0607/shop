@@ -3,6 +3,7 @@ package product
 import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
+	"shop/gateway/common/response"
 	"shop/gateway/internal/logic/product"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
@@ -12,7 +13,7 @@ func ListProductsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.ListProductsRequest
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 1000, err.Error())
 			return
 		}
 		if req.Page == 0 {
@@ -25,10 +26,9 @@ func ListProductsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := product.NewListProductsLogic(r.Context(), svcCtx)
 		resp, err := l.ListProducts(&req)
 		if err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 1000, err.Error())
 			return
 		}
-
-		httpx.OkJson(w, resp)
+		response.Success(w, resp)
 	}
 }

@@ -1,11 +1,10 @@
 package product
 
 import (
-	"encoding/json"
-	"errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
+	"shop/gateway/common/response"
 	"shop/gateway/internal/logic/product"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
@@ -15,44 +14,37 @@ func UpdateProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.UpdateProductRequest
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 1000, err.Error())
 			return
 		}
 
 		// 从 JWT 获取 user_id
-		userID, ok := r.Context().Value("user_id").(json.Number)
+		userID, ok := r.Context().Value("user_id").(string)
 		if !ok {
 			logx.Errorf("UpdateProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
-			httpx.Error(w, errors.New("invalid user_id in token"))
-			return
-		}
-		userIdInt64, err := userID.Int64()
-		if err != nil {
-			logx.Errorf("UpdateProductHandler: failed to convert user_id %v to int64: %v", userID, err)
-			httpx.Error(w, errors.New("failed to convert user_id to int64"))
+			response.Fail(w, 1000, "invalid user_id")
 			return
 		}
 		role, ok := r.Context().Value("role").(string)
 		if !ok {
 			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
-			httpx.Error(w, errors.New("invalid user_id in token"))
+			response.Fail(w, 1000, "invalid user_id")
 			return
 		}
 
 		// 管理员权限检查
 		if !isAdmin(role) {
-			logx.Errorf("UpdateProductHandler: user_id %d is not admin", userIdInt64)
-			httpx.Error(w, errors.New("admin access required"))
+			logx.Errorf("UpdateProductHandler: user_id %d is not admin", userID)
+			response.Fail(w, 1000, "user_id is not admin")
 			return
 		}
 
 		l := product.NewUpdateProductLogic(r.Context(), svcCtx)
 		resp, err := l.UpdateProduct(&req)
 		if err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 1000, err.Error())
 			return
 		}
-
-		httpx.OkJson(w, resp)
+		response.Success(w, resp)
 	}
 }

@@ -1,8 +1,6 @@
 package product
 
 import (
-	"encoding/json"
-	"errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
@@ -21,41 +19,34 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		// 从 JWT 获取 user_id
-		userID, ok := r.Context().Value("user_id").(json.Number)
+		userID, ok := r.Context().Value("user_id").(string)
 		if !ok {
 			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
 			response.Fail(w, 10000, "invalid user_id")
 			return
 		}
-		userIdInt64, err := userID.Int64()
-		if err != nil {
-			logx.Errorf("AddProductHandler: failed to convert user_id %v to int64: %v", userID, err)
-			httpx.Error(w, errors.New("failed to convert user_id to int64"))
-			return
-		}
-
 		role, ok := r.Context().Value("role").(string)
 		if !ok {
 			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
-			httpx.Error(w, errors.New("invalid user_id in token"))
+			response.Fail(w, 10000, "invalid user_id")
 			return
 		}
 
 		// 管理员权限检查
 		if !isAdmin(role) {
-			logx.Errorf("AddProductHandler: user_id %d,role %s is not admin", userIdInt64)
-			httpx.Error(w, errors.New("admin access required"))
+			logx.Errorf("AddProductHandler: user_id %d,role %s is not admin", userID)
+			response.Fail(w, 10000, "user_id is not admin")
 			return
 		}
 
 		l := product.NewAddProductLogic(r.Context(), svcCtx)
 		resp, err := l.AddProduct(&req)
 		if err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 10000, err.Error())
 			return
 		}
 
-		httpx.OkJson(w, resp)
+		response.Success(w, resp)
 	}
 }
 
