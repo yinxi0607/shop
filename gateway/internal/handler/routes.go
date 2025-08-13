@@ -6,6 +6,7 @@ package handler
 import (
 	"net/http"
 
+	order "shop/gateway/internal/handler/order"
 	product "shop/gateway/internal/handler/product"
 	user "shop/gateway/internal/handler/user"
 	"shop/gateway/internal/svc"
@@ -14,6 +15,40 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/order/create",
+					Handler: order.CreateOrderHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/order/detail",
+					Handler: order.GetOrderDetailHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/order/list",
+					Handler: order.ListOrdersHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/order/seckill",
+					Handler: order.SeckillOrderHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/order/update-status",
+					Handler: order.UpdateOrderStatusHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/v1"),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{

@@ -1,0 +1,82 @@
+syntax = "v1"
+
+type OrderItem {
+    ProductID string `json:"product_id"`
+    Quantity int32 `json:"quantity"`
+}
+
+type Order {
+    OrderID string `json:"order_id"`
+    UserID string `json:"user_id"`
+    Items []OrderItem `json:"items"`
+    TotalPrice float64 `json:"total_price"`
+    Status string `json:"status"` // pending, paid, shipped, cancelled
+    CreatedAt string `json:"created_at"`
+    UpdatedAt string `json:"updated_at"`
+}
+
+type CreateOrderRequest {
+    UserID string `json:"user_id,optional"` // 从JWT获取
+    Items []OrderItem `json:"items"`
+}
+
+type CreateOrderResponse {
+    OrderID string `json:"order_id"`
+}
+
+type SeckillOrderRequest {
+    UserID string `json:"user_id,optional"` // 从JWT获取
+    ProductID string `json:"product_id"`
+    Quantity int32 `json:"quantity"`
+}
+
+type SeckillOrderResponse {
+    OrderID string `json:"order_id"`
+    Success bool `json:"success"`
+}
+
+type GetOrderDetailRequest {
+    OrderID string `json:"order_id"`
+}
+
+type GetOrderDetailResponse {
+    Order Order `json:"order"`
+}
+
+type ListOrdersRequest {
+    UserID string `json:"user_id,optional"` // 从JWT获取
+    Page int32 `form:"page" default:"1"`
+    PageSize int32 `form:"page_size" default:"10"`
+}
+
+type ListOrdersResponse {
+    Orders []Order `json:"orders"`
+    Total int32 `json:"total"`
+}
+
+type UpdateOrderStatusRequest {
+    OrderID string `json:"order_id"`
+    Status string `json:"status"`
+}
+
+type UpdateOrderStatusResponse {
+    Success bool `json:"success"`
+}
+
+@server(
+    group: order
+    middleware: JwtMiddleware
+    prefix: /api/v1
+)
+service GatewayAPI {
+    @handler CreateOrder
+    post /order/create (CreateOrderRequest) returns (CreateOrderResponse)
+    @handler SeckillOrder
+    post /order/seckill (SeckillOrderRequest) returns (SeckillOrderResponse)
+    @handler GetOrderDetail
+    get /order/detail (GetOrderDetailRequest) returns (GetOrderDetailResponse)
+    @handler ListOrders
+    get /order/list (ListOrdersRequest) returns (ListOrdersResponse)
+    @handler UpdateOrderStatus
+    put /order/update-status (UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse)
+}

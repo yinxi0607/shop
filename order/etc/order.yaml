@@ -1,0 +1,12 @@
+Name: order
+Host: 0.0.0.0
+ListenOn: 0.0.0.0:9083
+Mysql:
+  DataSource: root:password@tcp(localhost:3306)/shop
+Redis:
+  Host: 127.0.0.1:6379
+  Key: product
+  Pass: nU(8auUJZs6C
+ProductRpc:
+  Target: 127.0.0.1:9082
+  NonBlock: true

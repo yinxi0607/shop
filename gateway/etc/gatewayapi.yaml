@@ -10,6 +10,10 @@ UserRpc:
   NonBlock: true
 ProductRpc:
   Target: 127.0.0.1:9082
+  NonBlock: true
+OrderRpc:
+  Target: 127.0.0.1:9083
+  NonBlock: true
 Jwt:
   AccessSecret: your-secret-key
   AccessExpire: 604800

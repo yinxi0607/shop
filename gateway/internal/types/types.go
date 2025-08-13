@@ -57,6 +57,23 @@ type ChangeUsernameResponse struct {
 	Success bool `json:"success"`
 }
 
+type CreateOrderRequest struct {
+	UserID string      `json:"user_id,optional"` // 从JWT获取
+	Items  []OrderItem `json:"items"`
+}
+
+type CreateOrderResponse struct {
+	OrderID string `json:"order_id"`
+}
+
+type GetOrderDetailRequest struct {
+	OrderID string `json:"order_id"`
+}
+
+type GetOrderDetailResponse struct {
+	Order Order `json:"order"`
+}
+
 type GetProductDetailRequest struct {
 	Pid string `form:"pid"`
 }
@@ -85,6 +102,17 @@ type ListBannerProductsRequest struct {
 
 type ListBannerProductsResponse struct {
 	Products []Product `json:"products"`
+}
+
+type ListOrdersRequest struct {
+	UserID   string `json:"user_id,optional"` // 从JWT获取
+	Page     int32  `form:"page" default:"1"`
+	PageSize int32  `form:"page_size" default:"10"`
+}
+
+type ListOrdersResponse struct {
+	Orders []Order `json:"orders"`
+	Total  int32   `json:"total"`
 }
 
 type ListProductsRequest struct {
@@ -117,6 +145,21 @@ type LoginResponse struct {
 	Token string `json:"token"`
 }
 
+type Order struct {
+	OrderID    string      `json:"order_id"`
+	UserID     string      `json:"user_id"`
+	Items      []OrderItem `json:"items"`
+	TotalPrice float64     `json:"total_price"`
+	Status     string      `json:"status"` // pending, paid, shipped, cancelled
+	CreatedAt  string      `json:"created_at"`
+	UpdatedAt  string      `json:"updated_at"`
+}
+
+type OrderItem struct {
+	ProductID string `json:"product_id"`
+	Quantity  int32  `json:"quantity"`
+}
+
 type Product struct {
 	Pid         string  `json:"pid"`
 	Name        string  `json:"name"`
@@ -142,6 +185,26 @@ type RegisterRequest struct {
 
 type RegisterResponse struct {
 	UserID string `json:"user_id"`
+}
+
+type SeckillOrderRequest struct {
+	UserID    string `json:"user_id,optional"` // 从JWT获取
+	ProductID string `json:"product_id"`
+	Quantity  int32  `json:"quantity"`
+}
+
+type SeckillOrderResponse struct {
+	OrderID string `json:"order_id"`
+	Success bool   `json:"success"`
+}
+
+type UpdateOrderStatusRequest struct {
+	OrderID string `json:"order_id"`
+	Status  string `json:"status"`
+}
+
+type UpdateOrderStatusResponse struct {
+	Success bool `json:"success"`
 }
 
 type UpdateProductRequest struct {
