@@ -24,7 +24,7 @@ func NewGetOrderDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetOrderDetailLogic) GetOrderDetail(req *types.GetOrderDetailRequest) (resp *types.GetOrderDetailResponse, err error) {
-	res, err := l.svcCtx.OrderRpc.GetOrderDetail(l.ctx, &order.GetOrderDetailRequest{OrderId: req.OrderID})
+	res, err := l.svcCtx.OrderRpc.GetOrderDetail(l.ctx, &order.GetOrderDetailRequest{OrderId: req.OrderID, UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}

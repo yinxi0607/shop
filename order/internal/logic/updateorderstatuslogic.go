@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"errors"
+	"fmt"
 	"shop/order/internal/svc"
 	"shop/order/order"
 	"time"
@@ -26,7 +27,7 @@ func NewUpdateOrderStatusLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *UpdateOrderStatusLogic) UpdateOrderStatus(in *order.UpdateOrderStatusRequest) (*order.UpdateOrderStatusResponse, error) {
 	// 验证订单是否存在
-	ord, err := l.svcCtx.OrderModel.FindOneByOrderId(l.ctx, in.OrderId)
+	ord, err := l.svcCtx.OrderModel.FindOneByOrderId(l.ctx, in.OrderId, in.UserId)
 	if err != nil {
 		return &order.UpdateOrderStatusResponse{Success: false}, errors.New("订单不存在")
 	}
@@ -45,7 +46,7 @@ func (l *UpdateOrderStatusLogic) UpdateOrderStatus(in *order.UpdateOrderStatusRe
 	}
 
 	// 清除Redis缓存
-	cacheKey := "order:detail:" + in.OrderId
+	cacheKey := fmt.Sprintf("order:detail:%s:%s", in.UserId, in.OrderId)
 	if _, err := l.svcCtx.Redis.DelCtx(l.ctx, cacheKey); err != nil {
 		l.Logger.Error("Failed to delete cache:", err)
 	}

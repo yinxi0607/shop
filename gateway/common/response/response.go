@@ -16,7 +16,7 @@ func Success(w http.ResponseWriter, data interface{}) {
 	httpx.OkJsonCtx(nil, w, Body{
 		Code: 0,
 		Data: data,
-		Msg:  "",
+		Msg:  "success",
 	})
 }
 

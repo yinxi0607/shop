@@ -2,7 +2,7 @@ Name: order
 Host: 0.0.0.0
 ListenOn: 0.0.0.0:9083
 Mysql:
-  DataSource: root:password@tcp(localhost:3306)/shop
+  DataSource: root:password@tcp(localhost:3306)/shop?charset=utf8mb4&parseTime=true
 Redis:
   Host: 127.0.0.1:6379
   Key: product

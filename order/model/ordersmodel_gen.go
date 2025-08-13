@@ -27,7 +27,7 @@ type (
 	ordersModel interface {
 		Insert(ctx context.Context, data *Orders) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Orders, error)
-		FindOneByOrderId(ctx context.Context, orderId string) (*Orders, error)
+		FindOneByOrderId(ctx context.Context, orderId, userId string) (*Orders, error)
 		Update(ctx context.Context, data *Orders) error
 		Delete(ctx context.Context, id int64) error
 		CountByUserId(ctx context.Context, userId string) (int64, error)
@@ -79,10 +79,10 @@ func (m *defaultOrdersModel) FindOne(ctx context.Context, id int64) (*Orders, er
 	}
 }
 
-func (m *defaultOrdersModel) FindOneByOrderId(ctx context.Context, orderId string) (*Orders, error) {
+func (m *defaultOrdersModel) FindOneByOrderId(ctx context.Context, orderId, userId string) (*Orders, error) {
 	var resp Orders
-	query := fmt.Sprintf("select %s from %s where `order_id` = ? limit 1", ordersRows, m.table)
-	err := m.conn.QueryRowCtx(ctx, &resp, query, orderId)
+	query := fmt.Sprintf("select %s from %s where `order_id` = ? and user_id = ? limit 1", ordersRows, m.table)
+	err := m.conn.QueryRowCtx(ctx, &resp, query, orderId, userId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -120,7 +120,7 @@ func (m *defaultOrdersModel) Transact(fn func(session sqlx.Session) error) error
 	return m.conn.Transact(fn)
 }
 func (m *defaultOrdersModel) FindByUserId(ctx context.Context, userId string, page, pageSize int32) ([]*Orders, error) {
-	query := `SELECT id, order_id, user_id, total_price, status, created_at, updated_at FROM orders WHERE user_id = ? LIMIT ? OFFSET ?`
+	query := `SELECT * FROM orders WHERE user_id = ? LIMIT ? OFFSET ?`
 	var orders []*Orders
 	err := m.conn.QueryRowsCtx(ctx, &orders, query, userId, pageSize, (page-1)*pageSize)
 	return orders, err

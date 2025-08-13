@@ -18,6 +18,12 @@ func ListOrdersHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			response.Fail(w, 1000, err.Error())
 			return
 		}
+		if req.Page <= 0 {
+			req.Page = 1
+		}
+		if req.PageSize <= 0 {
+			req.PageSize = 10
+		}
 		userID, ok := r.Context().Value("user_id").(string)
 		if !ok {
 			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))

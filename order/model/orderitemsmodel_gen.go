@@ -92,7 +92,7 @@ func (m *defaultOrderItemsModel) tableName() string {
 }
 
 func (m *defaultOrderItemsModel) FindByOrderId(ctx context.Context, orderId string) ([]*OrderItems, error) {
-	query := `SELECT id, order_id, product_id, quantity FROM order_items WHERE order_id = ?`
+	query := `SELECT * FROM order_items WHERE order_id = ?`
 	var items []*OrderItems
 	err := m.conn.QueryRowsCtx(ctx, &items, query, orderId)
 	return items, err

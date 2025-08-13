@@ -376,6 +376,7 @@ func (x *SeckillOrderResponse) GetSuccess() bool {
 type GetOrderDetailRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -413,6 +414,13 @@ func (*GetOrderDetailRequest) Descriptor() ([]byte, []int) {
 func (x *GetOrderDetailRequest) GetOrderId() string {
 	if x != nil {
 		return x.OrderId
+	}
+	return ""
+}
+
+func (x *GetOrderDetailRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
 	}
 	return ""
 }
@@ -576,7 +584,8 @@ func (x *ListOrdersResponse) GetTotal() int32 {
 type UpdateOrderStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -614,6 +623,13 @@ func (*UpdateOrderStatusRequest) Descriptor() ([]byte, []int) {
 func (x *UpdateOrderStatusRequest) GetOrderId() string {
 	if x != nil {
 		return x.OrderId
+	}
+	return ""
+}
+
+func (x *UpdateOrderStatusRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
 	}
 	return ""
 }
@@ -701,9 +717,10 @@ const file_order_proto_rawDesc = "" +
 	"\bquantity\x18\x03 \x01(\x05R\bquantity\"K\n" +
 	"\x14SeckillOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccess\"2\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\"K\n" +
 	"\x15GetOrderDetailRequest\x12\x19\n" +
-	"\border_id\x18\x01 \x01(\tR\aorderId\"<\n" +
+	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"<\n" +
 	"\x16GetOrderDetailResponse\x12\"\n" +
 	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"]\n" +
 	"\x11ListOrdersRequest\x12\x17\n" +
@@ -712,10 +729,11 @@ const file_order_proto_rawDesc = "" +
 	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\"P\n" +
 	"\x12ListOrdersResponse\x12$\n" +
 	"\x06orders\x18\x01 \x03(\v2\f.order.OrderR\x06orders\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"M\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"f\n" +
 	"\x18UpdateOrderStatusRequest\x12\x19\n" +
-	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\"5\n" +
+	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\"5\n" +
 	"\x19UpdateOrderStatusResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess2\x83\x03\n" +
 	"\bOrderRpc\x12D\n" +

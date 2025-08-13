@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
 	"shop/order/internal/svc"
 	"shop/order/order"
@@ -25,7 +26,7 @@ func NewGetOrderDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 func (l *GetOrderDetailLogic) GetOrderDetail(in *order.GetOrderDetailRequest) (*order.GetOrderDetailResponse, error) {
 	// 定义缓存键
-	cacheKey := "order:detail:" + in.OrderId
+	cacheKey := fmt.Sprintf("order:detail:%s:%s", in.UserId, in.OrderId)
 
 	// 尝试从Redis获取缓存
 	cached, err := l.svcCtx.Redis.GetCtx(l.ctx, cacheKey)
@@ -38,7 +39,7 @@ func (l *GetOrderDetailLogic) GetOrderDetail(in *order.GetOrderDetailRequest) (*
 	}
 
 	// 查询订单
-	ord, err := l.svcCtx.OrderModel.FindOneByOrderId(l.ctx, in.OrderId)
+	ord, err := l.svcCtx.OrderModel.FindOneByOrderId(l.ctx, in.OrderId, in.UserId)
 	if err != nil {
 		return &order.GetOrderDetailResponse{}, errors.New("订单不存在")
 	}

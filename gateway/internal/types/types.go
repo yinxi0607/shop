@@ -67,7 +67,8 @@ type CreateOrderResponse struct {
 }
 
 type GetOrderDetailRequest struct {
-	OrderID string `json:"order_id"`
+	OrderID string `form:"order_id"`
+	UserID  string `json:"user_id,optional"` // 从JWT获取
 }
 
 type GetOrderDetailResponse struct {
@@ -106,8 +107,8 @@ type ListBannerProductsResponse struct {
 
 type ListOrdersRequest struct {
 	UserID   string `json:"user_id,optional"` // 从JWT获取
-	Page     int32  `form:"page" default:"1"`
-	PageSize int32  `form:"page_size" default:"10"`
+	Page     int32  `form:"page,optional" default:"1"`
+	PageSize int32  `form:"page_size,optional" default:"10"`
 }
 
 type ListOrdersResponse struct {
@@ -199,6 +200,7 @@ type SeckillOrderResponse struct {
 }
 
 type UpdateOrderStatusRequest struct {
+	UserID  string `json:"user_id,optional"` // 从JWT获取
 	OrderID string `json:"order_id"`
 	Status  string `json:"status"`
 }
