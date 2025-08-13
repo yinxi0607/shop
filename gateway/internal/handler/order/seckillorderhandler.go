@@ -1,6 +1,7 @@
 package order
 
 import (
+	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
 	"shop/gateway/common/response"
 
@@ -17,7 +18,13 @@ func SeckillOrderHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			response.Fail(w, 1000, err.Error())
 			return
 		}
-
+		userID, ok := r.Context().Value("user_id").(string)
+		if !ok {
+			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
+			response.Fail(w, 10000, "invalid user_id")
+			return
+		}
+		req.UserID = userID
 		l := order.NewSeckillOrderLogic(r.Context(), svcCtx)
 		resp, err := l.SeckillOrder(&req)
 		if err != nil {

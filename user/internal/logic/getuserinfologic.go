@@ -45,6 +45,8 @@ func (l *GetUserInfoLogic) GetUserInfo(req *user.GetUserInfoRequest) (*user.GetU
 			Avatar:   u.Avatar,
 			Bio:      u.Bio,
 			Address:  address,
+			UserId:   u.UserId,
+			CreateAt: u.CreatedAt.Format("2006-01-02 15:04:05"),
 		},
 	}, nil
 }

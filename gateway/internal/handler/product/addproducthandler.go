@@ -5,6 +5,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
 	"shop/gateway/common/response"
+	"shop/gateway/common/utils"
 	"shop/gateway/internal/logic/product"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
@@ -33,7 +34,7 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		// 管理员权限检查
-		if !isAdmin(role) {
+		if !utils.IsAdmin(role) {
 			logx.Errorf("AddProductHandler: user_id %d,role %s is not admin", userID)
 			response.Fail(w, 10000, "user_id is not admin")
 			return
@@ -48,8 +49,4 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 
 		response.Success(w, resp)
 	}
-}
-
-func isAdmin(role string) bool {
-	return role == "admin" // Replace with actual role check (e.g., query users.role)
 }
