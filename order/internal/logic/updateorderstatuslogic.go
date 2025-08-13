@@ -44,5 +44,11 @@ func (l *UpdateOrderStatusLogic) UpdateOrderStatus(in *order.UpdateOrderStatusRe
 		return &order.UpdateOrderStatusResponse{Success: false}, err
 	}
 
+	// 清除Redis缓存
+	cacheKey := "order:detail:" + in.OrderId
+	if _, err := l.svcCtx.Redis.DelCtx(l.ctx, cacheKey); err != nil {
+		l.Logger.Error("Failed to delete cache:", err)
+	}
+
 	return &order.UpdateOrderStatusResponse{Success: true}, nil
 }
