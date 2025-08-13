@@ -52,3 +52,8 @@ func (s *UserRpcServer) ChangeAvatar(ctx context.Context, in *user.ChangeAvatarR
 	l := logic.NewChangeAvatarLogic(ctx, s.svcCtx)
 	return l.ChangeAvatar(in)
 }
+
+func (s *UserRpcServer) ChangeRole(ctx context.Context, in *user.ChangeRoleRequest) (*user.ChangeRoleResponse, error) {
+	l := logic.NewChangeRoleLogic(ctx, s.svcCtx)
+	return l.ChangeRole(in)
+}

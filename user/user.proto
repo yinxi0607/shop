@@ -56,6 +56,15 @@ message ChangePasswordResponse {
   bool success = 1;
 }
 
+message ChangeRoleRequest {
+  string user_id = 1;
+  string role = 2;
+}
+
+message ChangeRoleResponse {
+  bool success = 1;
+}
+
 message ChangeUsernameRequest {
   string user_id = 1;
   string new_username = 2;
@@ -81,4 +90,5 @@ service UserRpc {
   rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
   rpc ChangeUsername(ChangeUsernameRequest) returns (ChangeUsernameResponse);
   rpc ChangeAvatar(ChangeAvatarRequest) returns (ChangeAvatarResponse);
+  rpc ChangeRole(ChangeRoleRequest) returns (ChangeRoleResponse);
 }

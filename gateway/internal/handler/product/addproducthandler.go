@@ -6,6 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
+	"shop/gateway/common/response"
 	"shop/gateway/internal/logic/product"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
@@ -15,7 +16,7 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.AddProductRequest
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 10000, err.Error())
 			return
 		}
 
@@ -23,7 +24,7 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		userID, ok := r.Context().Value("user_id").(json.Number)
 		if !ok {
 			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
-			httpx.Error(w, errors.New("invalid user_id in token"))
+			response.Fail(w, 10000, "invalid user_id")
 			return
 		}
 		userIdInt64, err := userID.Int64()
@@ -33,9 +34,16 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
+		role, ok := r.Context().Value("role").(string)
+		if !ok {
+			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
+			httpx.Error(w, errors.New("invalid user_id in token"))
+			return
+		}
+
 		// 管理员权限检查
-		if !isAdmin(userIdInt64, svcCtx.Config.AdminUser) {
-			logx.Errorf("AddProductHandler: user_id %d is not admin", userIdInt64)
+		if !isAdmin(role) {
+			logx.Errorf("AddProductHandler: user_id %d,role %s is not admin", userIdInt64)
 			httpx.Error(w, errors.New("admin access required"))
 			return
 		}
@@ -51,6 +59,6 @@ func AddProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	}
 }
 
-func isAdmin(userID int64, adminUser int64) bool {
-	return userID == adminUser // Replace with actual role check (e.g., query users.role)
+func isAdmin(role string) bool {
+	return role == "admin" // Replace with actual role check (e.g., query users.role)
 }

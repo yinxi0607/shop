@@ -4,16 +4,19 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/zrpc"
+	"net/http"
 	"shop/gateway/internal/config"
+	"shop/gateway/internal/middleware"
 	"shop/product/product"
 	"shop/user/user"
 )
 
 type ServiceContext struct {
-	Config     config.Config
-	UserRpc    user.UserRpcClient
-	ProductRpc product.ProductRpcClient
-	Redis      *redis.Redis
+	Config        config.Config
+	UserRpc       user.UserRpcClient
+	ProductRpc    product.ProductRpcClient
+	Redis         *redis.Redis
+	JwtMiddleware func(next http.HandlerFunc) http.HandlerFunc
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -36,9 +39,10 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	return &ServiceContext{
-		Config:     c,
-		UserRpc:    user.NewUserRpcClient(userRpc.Conn()),
-		ProductRpc: product.NewProductRpcClient(productRpc.Conn()),
-		Redis:      redis.MustNewRedis(c.Redis),
+		Config:        c,
+		UserRpc:       user.NewUserRpcClient(userRpc.Conn()),
+		ProductRpc:    product.NewProductRpcClient(productRpc.Conn()),
+		Redis:         redis.MustNewRedis(c.Redis),
+		JwtMiddleware: middleware.NewJwtMiddleware(c.Jwt.AccessSecret).Handle,
 	}
 }

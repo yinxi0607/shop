@@ -18,6 +18,8 @@ type (
 	ChangeAvatarResponse   = user.ChangeAvatarResponse
 	ChangePasswordRequest  = user.ChangePasswordRequest
 	ChangePasswordResponse = user.ChangePasswordResponse
+	ChangeRoleRequest      = user.ChangeRoleRequest
+	ChangeRoleResponse     = user.ChangeRoleResponse
 	ChangeUsernameRequest  = user.ChangeUsernameRequest
 	ChangeUsernameResponse = user.ChangeUsernameResponse
 	GetUserInfoRequest     = user.GetUserInfoRequest
@@ -35,6 +37,7 @@ type (
 		ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error)
 		ChangeUsername(ctx context.Context, in *ChangeUsernameRequest, opts ...grpc.CallOption) (*ChangeUsernameResponse, error)
 		ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error)
+		ChangeRole(ctx context.Context, in *ChangeRoleRequest, opts ...grpc.CallOption) (*ChangeRoleResponse, error)
 	}
 
 	defaultUserRpc struct {
@@ -76,4 +79,9 @@ func (m *defaultUserRpc) ChangeUsername(ctx context.Context, in *ChangeUsernameR
 func (m *defaultUserRpc) ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error) {
 	client := user.NewUserRpcClient(m.cli.Conn())
 	return client.ChangeAvatar(ctx, in, opts...)
+}
+
+func (m *defaultUserRpc) ChangeRole(ctx context.Context, in *ChangeRoleRequest, opts ...grpc.CallOption) (*ChangeRoleResponse, error) {
+	client := user.NewUserRpcClient(m.cli.Conn())
+	return client.ChangeRole(ctx, in, opts...)
 }

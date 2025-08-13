@@ -1,11 +1,10 @@
 package user
 
 import (
-	"encoding/json"
-	"errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
+	"shop/gateway/common/response"
 	"shop/gateway/internal/logic/user"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
@@ -15,7 +14,7 @@ func GetUserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.GetUserInfoRequest
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 10000, err.Error())
 			return
 		}
 
@@ -23,27 +22,21 @@ func GetUserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		userIDValue := r.Context().Value("user_id")
 		logx.Infof("GetUserInfoHandler: user_id=%v, type=%T", userIDValue, userIDValue)
 
-		userID, ok := r.Context().Value("user_id").(json.Number)
+		userID, ok := r.Context().Value("user_id").(string)
 		if !ok {
 			logx.Errorf("GetUserInfoHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
-			httpx.Error(w, errors.New("invalid user_id in token"))
+			response.Fail(w, 10000, "invalid user_id")
 			return
 		}
-		userIdInt64, err := userID.Int64()
-		if err != nil {
-			logx.Errorf("GetUserInfoHandler: failed to convert user_id %v to int64: %v", userID, err)
-			httpx.Error(w, errors.New("failed to convert user_id to int64"))
-			return
-		}
-		req.UserID = userIdInt64
+
+		req.UserID = userID
 
 		l := user.NewGetUserInfoLogic(r.Context(), svcCtx)
 		resp, err := l.GetUserInfo(&req)
 		if err != nil {
-			httpx.Error(w, err)
+			response.Fail(w, 10000, err.Error())
 			return
 		}
-
-		httpx.OkJson(w, resp)
+		response.Success(w, resp)
 	}
 }

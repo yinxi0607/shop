@@ -545,6 +545,102 @@ func (x *ChangePasswordResponse) GetSuccess() bool {
 	return false
 }
 
+type ChangeRoleRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Role          string                 `protobuf:"bytes,2,opt,name=role,proto3" json:"role,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChangeRoleRequest) Reset() {
+	*x = ChangeRoleRequest{}
+	mi := &file_user_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangeRoleRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangeRoleRequest) ProtoMessage() {}
+
+func (x *ChangeRoleRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangeRoleRequest.ProtoReflect.Descriptor instead.
+func (*ChangeRoleRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ChangeRoleRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *ChangeRoleRequest) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
+}
+
+type ChangeRoleResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChangeRoleResponse) Reset() {
+	*x = ChangeRoleResponse{}
+	mi := &file_user_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangeRoleResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangeRoleResponse) ProtoMessage() {}
+
+func (x *ChangeRoleResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangeRoleResponse.ProtoReflect.Descriptor instead.
+func (*ChangeRoleResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ChangeRoleResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
 type ChangeUsernameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -555,7 +651,7 @@ type ChangeUsernameRequest struct {
 
 func (x *ChangeUsernameRequest) Reset() {
 	*x = ChangeUsernameRequest{}
-	mi := &file_user_proto_msgTypes[9]
+	mi := &file_user_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -567,7 +663,7 @@ func (x *ChangeUsernameRequest) String() string {
 func (*ChangeUsernameRequest) ProtoMessage() {}
 
 func (x *ChangeUsernameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[9]
+	mi := &file_user_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -580,7 +676,7 @@ func (x *ChangeUsernameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeUsernameRequest.ProtoReflect.Descriptor instead.
 func (*ChangeUsernameRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{9}
+	return file_user_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ChangeUsernameRequest) GetUserId() string {
@@ -606,7 +702,7 @@ type ChangeUsernameResponse struct {
 
 func (x *ChangeUsernameResponse) Reset() {
 	*x = ChangeUsernameResponse{}
-	mi := &file_user_proto_msgTypes[10]
+	mi := &file_user_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -618,7 +714,7 @@ func (x *ChangeUsernameResponse) String() string {
 func (*ChangeUsernameResponse) ProtoMessage() {}
 
 func (x *ChangeUsernameResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[10]
+	mi := &file_user_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -631,7 +727,7 @@ func (x *ChangeUsernameResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeUsernameResponse.ProtoReflect.Descriptor instead.
 func (*ChangeUsernameResponse) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{10}
+	return file_user_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ChangeUsernameResponse) GetSuccess() bool {
@@ -651,7 +747,7 @@ type ChangeAvatarRequest struct {
 
 func (x *ChangeAvatarRequest) Reset() {
 	*x = ChangeAvatarRequest{}
-	mi := &file_user_proto_msgTypes[11]
+	mi := &file_user_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -663,7 +759,7 @@ func (x *ChangeAvatarRequest) String() string {
 func (*ChangeAvatarRequest) ProtoMessage() {}
 
 func (x *ChangeAvatarRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[11]
+	mi := &file_user_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -676,7 +772,7 @@ func (x *ChangeAvatarRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeAvatarRequest.ProtoReflect.Descriptor instead.
 func (*ChangeAvatarRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{11}
+	return file_user_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ChangeAvatarRequest) GetUserId() string {
@@ -702,7 +798,7 @@ type ChangeAvatarResponse struct {
 
 func (x *ChangeAvatarResponse) Reset() {
 	*x = ChangeAvatarResponse{}
-	mi := &file_user_proto_msgTypes[12]
+	mi := &file_user_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -714,7 +810,7 @@ func (x *ChangeAvatarResponse) String() string {
 func (*ChangeAvatarResponse) ProtoMessage() {}
 
 func (x *ChangeAvatarResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[12]
+	mi := &file_user_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -727,7 +823,7 @@ func (x *ChangeAvatarResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeAvatarResponse.ProtoReflect.Descriptor instead.
 func (*ChangeAvatarResponse) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{12}
+	return file_user_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ChangeAvatarResponse) GetSuccess() bool {
@@ -776,6 +872,11 @@ const file_user_proto_rawDesc = "" +
 	"\fold_password\x18\x02 \x01(\tR\voldPassword\x12!\n" +
 	"\fnew_password\x18\x03 \x01(\tR\vnewPassword\"2\n" +
 	"\x16ChangePasswordResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"@\n" +
+	"\x11ChangeRoleRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
+	"\x04role\x18\x02 \x01(\tR\x04role\".\n" +
+	"\x12ChangeRoleResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\"S\n" +
 	"\x15ChangeUsernameRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12!\n" +
@@ -787,14 +888,16 @@ const file_user_proto_rawDesc = "" +
 	"\n" +
 	"new_avatar\x18\x02 \x01(\tR\tnewAvatar\"0\n" +
 	"\x14ChangeAvatarResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\x9b\x03\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xdc\x03\n" +
 	"\aUserRpc\x129\n" +
 	"\bRegister\x12\x15.user.RegisterRequest\x1a\x16.user.RegisterResponse\x120\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x13.user.LoginResponse\x12B\n" +
 	"\vGetUserInfo\x12\x18.user.GetUserInfoRequest\x1a\x19.user.GetUserInfoResponse\x12K\n" +
 	"\x0eChangePassword\x12\x1b.user.ChangePasswordRequest\x1a\x1c.user.ChangePasswordResponse\x12K\n" +
 	"\x0eChangeUsername\x12\x1b.user.ChangeUsernameRequest\x1a\x1c.user.ChangeUsernameResponse\x12E\n" +
-	"\fChangeAvatar\x12\x19.user.ChangeAvatarRequest\x1a\x1a.user.ChangeAvatarResponseB\bZ\x06./userb\x06proto3"
+	"\fChangeAvatar\x12\x19.user.ChangeAvatarRequest\x1a\x1a.user.ChangeAvatarResponse\x12?\n" +
+	"\n" +
+	"ChangeRole\x12\x17.user.ChangeRoleRequest\x1a\x18.user.ChangeRoleResponseB\bZ\x06./userb\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once
@@ -808,7 +911,7 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_user_proto_goTypes = []any{
 	(*RegisterRequest)(nil),        // 0: user.RegisterRequest
 	(*RegisterResponse)(nil),       // 1: user.RegisterResponse
@@ -819,10 +922,12 @@ var file_user_proto_goTypes = []any{
 	(*GetUserInfoResponse)(nil),    // 6: user.GetUserInfoResponse
 	(*ChangePasswordRequest)(nil),  // 7: user.ChangePasswordRequest
 	(*ChangePasswordResponse)(nil), // 8: user.ChangePasswordResponse
-	(*ChangeUsernameRequest)(nil),  // 9: user.ChangeUsernameRequest
-	(*ChangeUsernameResponse)(nil), // 10: user.ChangeUsernameResponse
-	(*ChangeAvatarRequest)(nil),    // 11: user.ChangeAvatarRequest
-	(*ChangeAvatarResponse)(nil),   // 12: user.ChangeAvatarResponse
+	(*ChangeRoleRequest)(nil),      // 9: user.ChangeRoleRequest
+	(*ChangeRoleResponse)(nil),     // 10: user.ChangeRoleResponse
+	(*ChangeUsernameRequest)(nil),  // 11: user.ChangeUsernameRequest
+	(*ChangeUsernameResponse)(nil), // 12: user.ChangeUsernameResponse
+	(*ChangeAvatarRequest)(nil),    // 13: user.ChangeAvatarRequest
+	(*ChangeAvatarResponse)(nil),   // 14: user.ChangeAvatarResponse
 }
 var file_user_proto_depIdxs = []int32{
 	5,  // 0: user.GetUserInfoResponse.user:type_name -> user.UserInfo
@@ -830,16 +935,18 @@ var file_user_proto_depIdxs = []int32{
 	2,  // 2: user.UserRpc.Login:input_type -> user.LoginRequest
 	4,  // 3: user.UserRpc.GetUserInfo:input_type -> user.GetUserInfoRequest
 	7,  // 4: user.UserRpc.ChangePassword:input_type -> user.ChangePasswordRequest
-	9,  // 5: user.UserRpc.ChangeUsername:input_type -> user.ChangeUsernameRequest
-	11, // 6: user.UserRpc.ChangeAvatar:input_type -> user.ChangeAvatarRequest
-	1,  // 7: user.UserRpc.Register:output_type -> user.RegisterResponse
-	3,  // 8: user.UserRpc.Login:output_type -> user.LoginResponse
-	6,  // 9: user.UserRpc.GetUserInfo:output_type -> user.GetUserInfoResponse
-	8,  // 10: user.UserRpc.ChangePassword:output_type -> user.ChangePasswordResponse
-	10, // 11: user.UserRpc.ChangeUsername:output_type -> user.ChangeUsernameResponse
-	12, // 12: user.UserRpc.ChangeAvatar:output_type -> user.ChangeAvatarResponse
-	7,  // [7:13] is the sub-list for method output_type
-	1,  // [1:7] is the sub-list for method input_type
+	11, // 5: user.UserRpc.ChangeUsername:input_type -> user.ChangeUsernameRequest
+	13, // 6: user.UserRpc.ChangeAvatar:input_type -> user.ChangeAvatarRequest
+	9,  // 7: user.UserRpc.ChangeRole:input_type -> user.ChangeRoleRequest
+	1,  // 8: user.UserRpc.Register:output_type -> user.RegisterResponse
+	3,  // 9: user.UserRpc.Login:output_type -> user.LoginResponse
+	6,  // 10: user.UserRpc.GetUserInfo:output_type -> user.GetUserInfoResponse
+	8,  // 11: user.UserRpc.ChangePassword:output_type -> user.ChangePasswordResponse
+	12, // 12: user.UserRpc.ChangeUsername:output_type -> user.ChangeUsernameResponse
+	14, // 13: user.UserRpc.ChangeAvatar:output_type -> user.ChangeAvatarResponse
+	10, // 14: user.UserRpc.ChangeRole:output_type -> user.ChangeRoleResponse
+	8,  // [8:15] is the sub-list for method output_type
+	1,  // [1:8] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name
 	1,  // [1:1] is the sub-list for extension extendee
 	0,  // [0:1] is the sub-list for field type_name
@@ -856,7 +963,7 @@ func file_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_proto_rawDesc), len(file_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

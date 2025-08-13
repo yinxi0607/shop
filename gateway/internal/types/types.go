@@ -21,7 +21,7 @@ type AddProductResponse struct {
 }
 
 type ChangeAvatarRequest struct {
-	UserID    int64  `json:"user_id,optional"` // Populated from JWT
+	UserID    string `json:"user_id,optional"` // Populated from JWT
 	NewAvatar string `json:"new_avatar"`
 }
 
@@ -30,7 +30,7 @@ type ChangeAvatarResponse struct {
 }
 
 type ChangePasswordRequest struct {
-	UserID      int64  `json:"user_id,optional"` // Populated from JWT
+	UserID      string `json:"user_id,optional"` // Populated from JWT
 	OldPassword string `json:"old_password"`
 	NewPassword string `json:"new_password"`
 }
@@ -39,8 +39,17 @@ type ChangePasswordResponse struct {
 	Success bool `json:"success"`
 }
 
+type ChangeRoleRequest struct {
+	UserID string `json:"user_id,optional"` // Populated from JWT
+	Role   string `json:"role"`
+}
+
+type ChangeRoleResponse struct {
+	Success bool `json:"success"`
+}
+
 type ChangeUsernameRequest struct {
-	UserID      int64  `json:"user_id,optional"` // Populated from JWT
+	UserID      string `json:"user_id,optional"` // Populated from JWT
 	NewUsername string `json:"new_username"`
 }
 
@@ -57,11 +66,11 @@ type GetProductDetailResponse struct {
 }
 
 type GetUserInfoRequest struct {
-	UserID int64 `json:"user_id,optional"` // Populated from JWT
+	UserID string `form:"user_id,optional"` // Populated from JWT
 }
 
 type GetUserInfoResponse struct {
-	UserID    int64  `json:"user_id"`
+	UserID    string `json:"user_id"`
 	Username  string `json:"username"`
 	Email     string `json:"email"`
 	Avatar    string `json:"avatar"`
@@ -132,7 +141,7 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	UserID int64 `json:"user_id"`
+	UserID string `json:"user_id"`
 }
 
 type UpdateProductRequest struct {

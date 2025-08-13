@@ -32,9 +32,15 @@ func UpdateProductHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.Error(w, errors.New("failed to convert user_id to int64"))
 			return
 		}
+		role, ok := r.Context().Value("role").(string)
+		if !ok {
+			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
+			httpx.Error(w, errors.New("invalid user_id in token"))
+			return
+		}
 
 		// 管理员权限检查
-		if !isAdmin(userIdInt64, svcCtx.Config.AdminUser) {
+		if !isAdmin(role) {
 			logx.Errorf("UpdateProductHandler: user_id %d is not admin", userIdInt64)
 			httpx.Error(w, errors.New("admin access required"))
 			return

@@ -10,7 +10,7 @@ type RegisterRequest {
 }
 
 type RegisterResponse {
-    UserID int64 `json:"user_id"`
+    UserID string `json:"user_id"`
 }
 
 type LoginRequest {
@@ -23,11 +23,11 @@ type LoginResponse {
 }
 
 type GetUserInfoRequest {
-    UserID int64 `json:"user_id,optional"` // Populated from JWT
+    UserID string `form:"user_id,optional"` // Populated from JWT
 }
 
 type GetUserInfoResponse {
-    UserID int64 `json:"user_id"`
+    UserID string `json:"user_id"`
     Username string `json:"username"`
     Email string `json:"email"`
     Avatar string `json:"avatar"`
@@ -37,7 +37,7 @@ type GetUserInfoResponse {
 }
 
 type ChangePasswordRequest {
-    UserID int64 `json:"user_id,optional"` // Populated from JWT
+    UserID string `json:"user_id,optional"` // Populated from JWT
     OldPassword string `json:"old_password"`
     NewPassword string `json:"new_password"`
 }
@@ -47,7 +47,7 @@ type ChangePasswordResponse {
 }
 
 type ChangeUsernameRequest {
-    UserID int64 `json:"user_id,optional"` // Populated from JWT
+    UserID string `json:"user_id,optional"` // Populated from JWT
     NewUsername string `json:"new_username"`
 }
 
@@ -55,8 +55,17 @@ type ChangeUsernameResponse {
     Success bool `json:"success"`
 }
 
+type ChangeRoleRequest {
+    UserID string `json:"user_id,optional"` // Populated from JWT
+    Role string `json:"role"`
+}
+
+type ChangeRoleResponse {
+    Success bool `json:"success"`
+}
+
 type ChangeAvatarRequest {
-    UserID int64 `json:"user_id,optional"` // Populated from JWT
+    UserID string `json:"user_id,optional"` // Populated from JWT
     NewAvatar string `json:"new_avatar"`
 }
 
@@ -76,15 +85,18 @@ service GatewayAPI {
 
 @server(
     group: user
-    middleware: Jwt
+    middleware: JwtMiddleware
+    prefix: /api/v1
 )
 service GatewayAPI {
     @handler GetUserInfo
     get /user/info (GetUserInfoRequest) returns (GetUserInfoResponse)
     @handler ChangePassword
-    post /user/change-password (ChangePasswordRequest) returns (ChangePasswordResponse)
+    put /user/change-password (ChangePasswordRequest) returns (ChangePasswordResponse)
     @handler ChangeUsername
-    post /user/change-username (ChangeUsernameRequest) returns (ChangeUsernameResponse)
+    put /user/change-username (ChangeUsernameRequest) returns (ChangeUsernameResponse)
     @handler ChangeAvatar
-    post /user/change-avatar (ChangeAvatarRequest) returns (ChangeAvatarResponse)
+    put /user/change-avatar (ChangeAvatarRequest) returns (ChangeAvatarResponse)
+    @handler ChangeRole
+    put /user/change-role (ChangeRoleRequest) returns (ChangeRoleResponse)
 }

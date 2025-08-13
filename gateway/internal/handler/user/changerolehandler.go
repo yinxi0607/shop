@@ -1,31 +1,29 @@
 package user
 
 import (
-	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
 	"shop/gateway/common/response"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"shop/gateway/internal/logic/user"
 	"shop/gateway/internal/svc"
 	"shop/gateway/internal/types"
 )
 
-func RegisterHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func ChangeRoleHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.RegisterRequest
+		var req types.ChangeRoleRequest
 		if err := httpx.Parse(r, &req); err != nil {
 			response.Fail(w, 10000, err.Error())
 			return
 		}
 
-		l := user.NewRegisterLogic(r.Context(), svcCtx)
-		resp, err := l.Register(&req)
+		l := user.NewChangeRoleLogic(r.Context(), svcCtx)
+		resp, err := l.ChangeRole(&req)
 		if err != nil {
-			//httpx.Error(w, err)
 			response.Fail(w, 10000, err.Error())
-			return
+		} else {
+			response.Success(w, resp)
 		}
-
-		//httpx.OkJson(w, resp)
-		response.Success(w, resp)
 	}
 }

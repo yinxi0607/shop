@@ -25,6 +25,7 @@ const (
 	UserRpc_ChangePassword_FullMethodName = "/user.UserRpc/ChangePassword"
 	UserRpc_ChangeUsername_FullMethodName = "/user.UserRpc/ChangeUsername"
 	UserRpc_ChangeAvatar_FullMethodName   = "/user.UserRpc/ChangeAvatar"
+	UserRpc_ChangeRole_FullMethodName     = "/user.UserRpc/ChangeRole"
 )
 
 // UserRpcClient is the client API for UserRpc service.
@@ -37,6 +38,7 @@ type UserRpcClient interface {
 	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error)
 	ChangeUsername(ctx context.Context, in *ChangeUsernameRequest, opts ...grpc.CallOption) (*ChangeUsernameResponse, error)
 	ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error)
+	ChangeRole(ctx context.Context, in *ChangeRoleRequest, opts ...grpc.CallOption) (*ChangeRoleResponse, error)
 }
 
 type userRpcClient struct {
@@ -107,6 +109,16 @@ func (c *userRpcClient) ChangeAvatar(ctx context.Context, in *ChangeAvatarReques
 	return out, nil
 }
 
+func (c *userRpcClient) ChangeRole(ctx context.Context, in *ChangeRoleRequest, opts ...grpc.CallOption) (*ChangeRoleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChangeRoleResponse)
+	err := c.cc.Invoke(ctx, UserRpc_ChangeRole_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserRpcServer is the server API for UserRpc service.
 // All implementations must embed UnimplementedUserRpcServer
 // for forward compatibility.
@@ -117,6 +129,7 @@ type UserRpcServer interface {
 	ChangePassword(context.Context, *ChangePasswordRequest) (*ChangePasswordResponse, error)
 	ChangeUsername(context.Context, *ChangeUsernameRequest) (*ChangeUsernameResponse, error)
 	ChangeAvatar(context.Context, *ChangeAvatarRequest) (*ChangeAvatarResponse, error)
+	ChangeRole(context.Context, *ChangeRoleRequest) (*ChangeRoleResponse, error)
 	mustEmbedUnimplementedUserRpcServer()
 }
 
@@ -144,6 +157,9 @@ func (UnimplementedUserRpcServer) ChangeUsername(context.Context, *ChangeUsernam
 }
 func (UnimplementedUserRpcServer) ChangeAvatar(context.Context, *ChangeAvatarRequest) (*ChangeAvatarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangeAvatar not implemented")
+}
+func (UnimplementedUserRpcServer) ChangeRole(context.Context, *ChangeRoleRequest) (*ChangeRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeRole not implemented")
 }
 func (UnimplementedUserRpcServer) mustEmbedUnimplementedUserRpcServer() {}
 func (UnimplementedUserRpcServer) testEmbeddedByValue()                 {}
@@ -274,6 +290,24 @@ func _UserRpc_ChangeAvatar_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserRpc_ChangeRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserRpcServer).ChangeRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserRpc_ChangeRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserRpcServer).ChangeRole(ctx, req.(*ChangeRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserRpc_ServiceDesc is the grpc.ServiceDesc for UserRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +338,10 @@ var UserRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChangeAvatar",
 			Handler:    _UserRpc_ChangeAvatar_Handler,
+		},
+		{
+			MethodName: "ChangeRole",
+			Handler:    _UserRpc_ChangeRole_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

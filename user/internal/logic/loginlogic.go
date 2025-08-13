@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"shop/user/internal/svc"
 	"shop/user/user"
@@ -42,7 +42,8 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": u.Id,
+		"user_id": u.UserId,
+		"role":    u.Role,
 		"exp":     time.Now().Add(time.Duration(l.svcCtx.Config.Jwt.AccessExpire) * time.Second).Unix(),
 	})
 	tokenString, err := token.SignedString([]byte(l.svcCtx.Config.Jwt.AccessSecret))

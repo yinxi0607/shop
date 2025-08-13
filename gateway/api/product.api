@@ -15,11 +15,11 @@ type Product {
 }
 
 type ListProductsRequest {
-    Page int32 `json:"page" default:"1"`
-    PageSize int32 `json:"page_size" default:"10"`
-    CategoryID string `json:"category_id,optional"`
-    MinPrice float64 `json:"min_price,optional"`
-    MaxPrice float64 `json:"max_price,optional"`
+    Page int32 `form:"page" default:"1"`
+    PageSize int32 `form:"page_size" default:"10"`
+    CategoryID string `form:"category_id,optional"`
+    MinPrice float64 `form:"min_price,optional"`
+    MaxPrice float64 `form:"max_price,optional"`
 }
 
 type ListProductsResponse {
@@ -28,7 +28,7 @@ type ListProductsResponse {
 }
 
 type GetProductDetailRequest {
-    Pid string `json:"pid"`
+    Pid string `form:"pid"`
 }
 
 type GetProductDetailResponse {
@@ -69,7 +69,7 @@ type AddProductResponse {
 }
 
 type ListBannerProductsRequest {
-    Limit int32 `json:"limit" default:"5"`
+    Limit int32 `form:"limit" default:"5"`
 }
 
 type ListBannerProductsResponse {
@@ -77,7 +77,7 @@ type ListBannerProductsResponse {
 }
 
 type ListRecommendedProductsRequest {
-    Limit int32 `json:"limit" default:"5"`
+    Limit int32 `form:"limit" default:"5"`
 }
 
 type ListRecommendedProductsResponse {
@@ -86,6 +86,7 @@ type ListRecommendedProductsResponse {
 
 @server(
     group: product
+    prefix: /api/v1
 )
 service GatewayAPI {
     @handler ListProducts
@@ -100,7 +101,8 @@ service GatewayAPI {
 
 @server(
     group: product
-    middleware: Jwt
+    middleware: JwtMiddleware
+    prefix: /api/v1
 )
 service GatewayAPI {
     @handler UpdateProduct

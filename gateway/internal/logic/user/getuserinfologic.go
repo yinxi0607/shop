@@ -34,7 +34,7 @@ func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoRequest) (resp *typ
 	}
 
 	return &types.GetUserInfoResponse{
-		UserID:    userResp.User.Id,
+		UserID:    userResp.User.UserId,
 		Username:  userResp.User.Username,
 		Email:     userResp.User.Email,
 		Avatar:    userResp.User.Avatar,

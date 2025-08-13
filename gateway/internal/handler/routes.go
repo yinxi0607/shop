@@ -37,24 +37,26 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: product.ListRecommendedProductsHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/api/v1/"),
+		rest.WithPrefix("/api/v1"),
 	)
 
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/product/add",
-				Handler: product.AddProductHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/product/update",
-				Handler: product.UpdateProductHandler(serverCtx),
-			},
-		},
-		rest.WithJwt(serverCtx.Config.Jwt.AccessSecret),
-		rest.WithPrefix("/api/v1/"),
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/product/add",
+					Handler: product.AddProductHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/product/update",
+					Handler: product.UpdateProductHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/v1"),
 	)
 
 	server.AddRoutes(
@@ -73,30 +75,36 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-
-		[]rest.Route{
-			{
-				Method:  http.MethodPut,
-				Path:    "/user/change-avatar",
-				Handler: user.ChangeAvatarHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/user/change-password",
-				Handler: user.ChangePasswordHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/user/change-username",
-				Handler: user.ChangeUsernameHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/user/info",
-				Handler: user.GetUserInfoHandler(serverCtx),
-			},
-		},
-		rest.WithJwt(serverCtx.Config.Jwt.AccessSecret),
-		rest.WithPrefix("/api/v1/"),
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPut,
+					Path:    "/user/change-avatar",
+					Handler: user.ChangeAvatarHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/user/change-password",
+					Handler: user.ChangePasswordHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/user/change-role",
+					Handler: user.ChangeRoleHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/user/change-username",
+					Handler: user.ChangeUsernameHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/user/info",
+					Handler: user.GetUserInfoHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/api/v1"),
 	)
 }
