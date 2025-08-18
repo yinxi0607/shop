@@ -49,7 +49,11 @@ func (l *CreateOrderLogic) CreateOrder(in *order.CreateOrderRequest) (*order.Cre
 			})
 		}
 	} else {
-		return &order.CreateOrderResponse{}, errors.New("非购物车下单暂不支持")
+		//return &order.CreateOrderResponse{}, errors.New("非购物车下单暂不支持")
+		if len(in.Items) == 0 {
+			return &order.CreateOrderResponse{}, errors.New("商品列表为空")
+		}
+		items = in.Items
 	}
 
 	// 计算总价并验证库存
