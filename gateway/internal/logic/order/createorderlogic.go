@@ -26,7 +26,7 @@ func NewCreateOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Creat
 func (l *CreateOrderLogic) CreateOrder(req *types.CreateOrderRequest) (resp *types.CreateOrderResponse, err error) {
 	items := make([]*order.OrderItem, len(req.Items))
 	for i, item := range req.Items {
-		items[i] = &order.OrderItem{ProductId: item.ProductID, Quantity: item.Quantity}
+		items[i] = &order.OrderItem{Pid: item.Pid, Quantity: item.Quantity}
 	}
 	res, err := l.svcCtx.OrderRpc.CreateOrder(l.ctx, &order.CreateOrderRequest{
 		UserId: req.UserID,

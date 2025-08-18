@@ -5,6 +5,7 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
+	"shop/cart/cart"
 	"shop/order/internal/config"
 	"shop/order/model"
 	"shop/product/product"
@@ -16,6 +17,7 @@ type ServiceContext struct {
 	OrderItemModel model.OrderItemsModel
 	Redis          *redis.Redis
 	ProductRpc     product.ProductRpcClient
+	CartRpc        cart.CartRpcClient
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -25,11 +27,18 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		logx.Errorf("NewServiceContext: failed to initialize ProductRpc: %v", err)
 		panic(err)
 	}
+	// 初始化购物车服务 gRPC 客户端
+	cartRpc, err := zrpc.NewClient(c.CartRpc)
+	if err != nil {
+		logx.Errorf("NewServiceContext: failed to initialize CartRpc: %v", err)
+		panic(err)
+	}
 	return &ServiceContext{
 		Config:         c,
 		OrderModel:     model.NewOrdersModel(sqlx.NewMysql(c.Mysql.DataSource)),
 		OrderItemModel: model.NewOrderItemsModel(sqlx.NewMysql(c.Mysql.DataSource)),
 		Redis:          redis.MustNewRedis(c.Redis.RedisConf),
 		ProductRpc:     product.NewProductRpcClient(productRpc.Conn()),
+		CartRpc:        cart.NewCartRpcClient(cartRpc.Conn()),
 	}
 }

@@ -20,6 +20,21 @@ type AddProductResponse struct {
 	Pid string `json:"pid"`
 }
 
+type AddToCartRequest struct {
+	UserID   string `json:"user_id,optional"` // 从 JWT 获取
+	Pid      string `json:"pid"`              // 修改为 Pid
+	Quantity int32  `json:"quantity"`
+}
+
+type AddToCartResponse struct {
+	Success bool `json:"success"`
+}
+
+type CartItem struct {
+	Pid      string `json:"pid"` // 修改为 Pid
+	Quantity int32  `json:"quantity"`
+}
+
 type ChangeAvatarRequest struct {
 	UserID    string `json:"user_id,optional"` // Populated from JWT
 	NewAvatar string `json:"new_avatar"`
@@ -57,18 +72,36 @@ type ChangeUsernameResponse struct {
 	Success bool `json:"success"`
 }
 
+type ClearCartRequest struct {
+	UserID string `json:"user_id,optional"` // 从 JWT 获取
+}
+
+type ClearCartResponse struct {
+	Success bool `json:"success"`
+}
+
 type CreateOrderRequest struct {
-	UserID string      `json:"user_id,optional"` // 从JWT获取
-	Items  []OrderItem `json:"items"`
+	UserID  string      `json:"user_id,optional"`
+	UseCart bool        `json:"use_cart"`
+	Items   []OrderItem `json:"items,optional"`
 }
 
 type CreateOrderResponse struct {
 	OrderID string `json:"order_id"`
 }
 
+type GetCartRequest struct {
+	UserID string `form:"user_id,optional"` // 从 JWT 获取
+}
+
+type GetCartResponse struct {
+	CartID string     `json:"cart_id"`
+	Items  []CartItem `json:"items"`
+}
+
 type GetOrderDetailRequest struct {
 	OrderID string `form:"order_id"`
-	UserID  string `json:"user_id,optional"` // 从JWT获取
+	UserID  string `form:"user_id,optional"` // 新增 UserID
 }
 
 type GetOrderDetailResponse struct {
@@ -106,9 +139,9 @@ type ListBannerProductsResponse struct {
 }
 
 type ListOrdersRequest struct {
-	UserID   string `json:"user_id,optional"` // 从JWT获取
-	Page     int32  `form:"page,optional" default:"1"`
-	PageSize int32  `form:"page_size,optional" default:"10"`
+	UserID   string `form:"user_id,optional"`
+	Page     int32  `form:"page" default:"1"`
+	PageSize int32  `form:"page_size" default:"10"`
 }
 
 type ListOrdersResponse struct {
@@ -151,14 +184,14 @@ type Order struct {
 	UserID     string      `json:"user_id"`
 	Items      []OrderItem `json:"items"`
 	TotalPrice float64     `json:"total_price"`
-	Status     string      `json:"status"` // pending, paid, shipped, cancelled
+	Status     string      `json:"status"`
 	CreatedAt  string      `json:"created_at"`
 	UpdatedAt  string      `json:"updated_at"`
 }
 
 type OrderItem struct {
-	ProductID string `json:"product_id"`
-	Quantity  int32  `json:"quantity"`
+	Pid      string `json:"pid"`
+	Quantity int32  `json:"quantity"`
 }
 
 type Product struct {
@@ -189,9 +222,9 @@ type RegisterResponse struct {
 }
 
 type SeckillOrderRequest struct {
-	UserID    string `json:"user_id,optional"` // 从JWT获取
-	ProductID string `json:"product_id"`
-	Quantity  int32  `json:"quantity"`
+	UserID   string `json:"user_id,optional"`
+	Pid      string `json:"pid"`
+	Quantity int32  `json:"quantity"`
 }
 
 type SeckillOrderResponse struct {
@@ -199,10 +232,20 @@ type SeckillOrderResponse struct {
 	Success bool   `json:"success"`
 }
 
+type UpdateCartRequest struct {
+	UserID   string `json:"user_id,optional"` // 从 JWT 获取
+	Pid      string `json:"pid"`              // 修改为 Pid
+	Quantity int32  `json:"quantity"`
+}
+
+type UpdateCartResponse struct {
+	Success bool `json:"success"`
+}
+
 type UpdateOrderStatusRequest struct {
-	UserID  string `json:"user_id,optional"` // 从JWT获取
 	OrderID string `json:"order_id"`
 	Status  string `json:"status"`
+	UserID  string `form:"user_id,optional"` // 新增 UserID
 }
 
 type UpdateOrderStatusResponse struct {

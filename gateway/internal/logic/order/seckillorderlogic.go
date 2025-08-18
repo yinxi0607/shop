@@ -25,9 +25,9 @@ func NewSeckillOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Seck
 
 func (l *SeckillOrderLogic) SeckillOrder(req *types.SeckillOrderRequest) (resp *types.SeckillOrderResponse, err error) {
 	res, err := l.svcCtx.OrderRpc.SeckillOrder(l.ctx, &order.SeckillOrderRequest{
-		UserId:    req.UserID,
-		ProductId: req.ProductID,
-		Quantity:  req.Quantity,
+		UserId:   req.UserID,
+		Pid:      req.Pid,
+		Quantity: req.Quantity,
 	})
 	if err != nil {
 		return nil, err

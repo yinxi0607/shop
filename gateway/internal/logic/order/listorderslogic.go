@@ -36,7 +36,7 @@ func (l *ListOrdersLogic) ListOrders(req *types.ListOrdersRequest) (resp *types.
 	for i, ord := range res.Orders {
 		items := make([]types.OrderItem, len(ord.Items))
 		for j, item := range ord.Items {
-			items[j] = types.OrderItem{ProductID: item.ProductId, Quantity: item.Quantity}
+			items[j] = types.OrderItem{Pid: item.Pid, Quantity: item.Quantity}
 		}
 		orders[i] = types.Order{
 			OrderID:    ord.OrderId,

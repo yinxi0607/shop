@@ -45,8 +45,8 @@ func (l *ListOrdersLogic) ListOrders(in *order.ListOrdersRequest) (*order.ListOr
 		orderItems := make([]*order.OrderItem, len(items))
 		for j, item := range items {
 			orderItems[j] = &order.OrderItem{
-				ProductId: item.ProductId,
-				Quantity:  int32(item.Quantity),
+				Pid:      item.ProductId,
+				Quantity: int32(item.Quantity),
 			}
 		}
 		resOrders[i] = &order.Order{

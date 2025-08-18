@@ -20,7 +20,7 @@ func SeckillOrderHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 		userID, ok := r.Context().Value("user_id").(string)
 		if !ok {
-			logx.Errorf("AddProductHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
+			logx.Errorf("SeckillOrderHandler: invalid user_id type, got %T", r.Context().Value("user_id"))
 			response.Fail(w, 10000, "invalid user_id")
 			return
 		}

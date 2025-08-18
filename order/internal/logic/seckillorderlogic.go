@@ -30,8 +30,8 @@ func NewSeckillOrderLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Seck
 
 func (l *SeckillOrderLogic) SeckillOrder(in *order.SeckillOrderRequest) (*order.SeckillOrderResponse, error) {
 	// 获取分布式锁
-	lockKey := "seckill:lock:" + in.ProductId
-	orderKey := "seckill:order:" + in.UserId + ":" + in.ProductId
+	lockKey := "seckill:lock:" + in.Pid
+	orderKey := "seckill:order:" + in.UserId + ":" + in.Pid
 
 	// 使用SetNX并设置5秒过期时间
 	lock, err := l.svcCtx.Redis.SetnxExCtx(l.ctx, lockKey, "1", 5)
@@ -58,7 +58,7 @@ func (l *SeckillOrderLogic) SeckillOrder(in *order.SeckillOrderRequest) (*order.
 	}
 
 	// 查询商品库存
-	prodRes, err := l.svcCtx.ProductRpc.GetProductDetail(l.ctx, &product.GetProductDetailRequest{Pid: in.ProductId})
+	prodRes, err := l.svcCtx.ProductRpc.GetProductDetail(l.ctx, &product.GetProductDetailRequest{Pid: in.Pid})
 	if err != nil || prodRes.Product == nil {
 		return &order.SeckillOrderResponse{Success: false}, errors.New("商品不存在")
 	}
@@ -69,7 +69,7 @@ func (l *SeckillOrderLogic) SeckillOrder(in *order.SeckillOrderRequest) (*order.
 	// 扣减库存（使用乐观锁）
 	stock := prodRes.Product.Stock - in.Quantity
 	updateReq := &product.UpdateProductRequest{
-		Pid:   in.ProductId,
+		Pid:   in.Pid,
 		Stock: &stock,
 	}
 	updateRes, err := l.svcCtx.ProductRpc.UpdateProduct(l.ctx, updateReq)
@@ -89,13 +89,13 @@ func (l *SeckillOrderLogic) SeckillOrder(in *order.SeckillOrderRequest) (*order.
 			CreatedAt:  time.Now(),
 			UpdatedAt:  time.Now(),
 		}
-		if _, err := l.svcCtx.OrderModel.Insert(l.ctx, newOrder); err != nil {
+		if _, err = l.svcCtx.OrderModel.Insert(l.ctx, newOrder); err != nil {
 			return err
 		}
 
 		orderItem := &model.OrderItems{
 			OrderId:   orderID,
-			ProductId: in.ProductId,
+			ProductId: in.Pid,
 			Quantity:  int64(in.Quantity),
 		}
 		if _, err = l.svcCtx.OrderItemModel.Insert(l.ctx, orderItem); err != nil {

@@ -5,6 +5,7 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/zrpc"
 	"net/http"
+	"shop/cart/cart"
 	"shop/gateway/internal/config"
 	"shop/gateway/internal/middleware"
 	"shop/order/order"
@@ -17,6 +18,7 @@ type ServiceContext struct {
 	UserRpc       user.UserRpcClient
 	ProductRpc    product.ProductRpcClient
 	OrderRpc      order.OrderRpcClient
+	CartRpc       cart.CartRpcClient
 	Redis         *redis.Redis
 	JwtMiddleware func(next http.HandlerFunc) http.HandlerFunc
 }
@@ -43,11 +45,19 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(err)
 	}
 
+	// 初始化购物车服务 gRPC 客户端
+	cartRpc, err := zrpc.NewClient(c.CartRpc)
+	if err != nil {
+		logx.Errorf("NewServiceContext: failed to initialize CartRpc: %v", err)
+		panic(err)
+	}
+
 	return &ServiceContext{
 		Config:        c,
 		UserRpc:       user.NewUserRpcClient(userRpc.Conn()),
 		ProductRpc:    product.NewProductRpcClient(productRpc.Conn()),
 		OrderRpc:      order.NewOrderRpcClient(orderRpc.Conn()),
+		CartRpc:       cart.NewCartRpcClient(cartRpc.Conn()),
 		Redis:         redis.MustNewRedis(c.Redis),
 		JwtMiddleware: middleware.NewJwtMiddleware(c.Jwt.AccessSecret).Handle,
 	}

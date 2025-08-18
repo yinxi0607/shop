@@ -1,7 +1,7 @@
 syntax = "v1"
 
 type OrderItem {
-    ProductID string `json:"product_id"`
+    Pid string `json:"pid"`
     Quantity int32 `json:"quantity"`
 }
 
@@ -10,34 +10,24 @@ type Order {
     UserID string `json:"user_id"`
     Items []OrderItem `json:"items"`
     TotalPrice float64 `json:"total_price"`
-    Status string `json:"status"` // pending, paid, shipped, cancelled
+    Status string `json:"status"`
     CreatedAt string `json:"created_at"`
     UpdatedAt string `json:"updated_at"`
 }
 
 type CreateOrderRequest {
-    UserID string `json:"user_id,optional"` // 从JWT获取
-    Items []OrderItem `json:"items"`
+    UserID string `json:"user_id,optional"`
+    UseCart bool `json:"use_cart"`
+    Items []OrderItem `json:"items,optional"`
 }
 
 type CreateOrderResponse {
     OrderID string `json:"order_id"`
 }
 
-type SeckillOrderRequest {
-    UserID string `json:"user_id,optional"` // 从JWT获取
-    ProductID string `json:"product_id"`
-    Quantity int32 `json:"quantity"`
-}
-
-type SeckillOrderResponse {
-    OrderID string `json:"order_id"`
-    Success bool `json:"success"`
-}
-
 type GetOrderDetailRequest {
     OrderID string `form:"order_id"`
-    UserID string `json:"user_id,optional"` // 从JWT获取
+    UserID string `form:"user_id,optional"` // 新增 UserID
 }
 
 type GetOrderDetailResponse {
@@ -45,9 +35,9 @@ type GetOrderDetailResponse {
 }
 
 type ListOrdersRequest {
-    UserID string `json:"user_id,optional"` // 从JWT获取
-    Page int32 `form:"page,optional" default:"1"`
-    PageSize int32 `form:"page_size,optional" default:"10"`
+    UserID string `form:"user_id,optional"`
+    Page int32 `form:"page" default:"1"`
+    PageSize int32 `form:"page_size" default:"10"`
 }
 
 type ListOrdersResponse {
@@ -56,12 +46,23 @@ type ListOrdersResponse {
 }
 
 type UpdateOrderStatusRequest {
-    UserID string `json:"user_id,optional"`  // 从JWT获取
     OrderID string `json:"order_id"`
     Status string `json:"status"`
+    UserID string `form:"user_id,optional"` // 新增 UserID
 }
 
 type UpdateOrderStatusResponse {
+    Success bool `json:"success"`
+}
+
+type SeckillOrderRequest {
+    UserID string `json:"user_id,optional"`
+    Pid string `json:"pid"`
+    Quantity int32 `json:"quantity"`
+}
+
+type SeckillOrderResponse {
+    OrderID string `json:"order_id"`
     Success bool `json:"success"`
 }
 
@@ -73,12 +74,16 @@ type UpdateOrderStatusResponse {
 service GatewayAPI {
     @handler CreateOrder
     post /order/create (CreateOrderRequest) returns (CreateOrderResponse)
-    @handler SeckillOrder
-    post /order/seckill (SeckillOrderRequest) returns (SeckillOrderResponse)
+
     @handler GetOrderDetail
     get /order/detail (GetOrderDetailRequest) returns (GetOrderDetailResponse)
+
     @handler ListOrders
     get /order/list (ListOrdersRequest) returns (ListOrdersResponse)
+
     @handler UpdateOrderStatus
     put /order/update-status (UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse)
+
+    @handler SeckillOrder
+    post /order/seckill (SeckillOrderRequest) returns (SeckillOrderResponse)
 }

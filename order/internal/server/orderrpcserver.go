@@ -28,11 +28,6 @@ func (s *OrderRpcServer) CreateOrder(ctx context.Context, in *order.CreateOrderR
 	return l.CreateOrder(in)
 }
 
-func (s *OrderRpcServer) SeckillOrder(ctx context.Context, in *order.SeckillOrderRequest) (*order.SeckillOrderResponse, error) {
-	l := logic.NewSeckillOrderLogic(ctx, s.svcCtx)
-	return l.SeckillOrder(in)
-}
-
 func (s *OrderRpcServer) GetOrderDetail(ctx context.Context, in *order.GetOrderDetailRequest) (*order.GetOrderDetailResponse, error) {
 	l := logic.NewGetOrderDetailLogic(ctx, s.svcCtx)
 	return l.GetOrderDetail(in)
@@ -46,4 +41,9 @@ func (s *OrderRpcServer) ListOrders(ctx context.Context, in *order.ListOrdersReq
 func (s *OrderRpcServer) UpdateOrderStatus(ctx context.Context, in *order.UpdateOrderStatusRequest) (*order.UpdateOrderStatusResponse, error) {
 	l := logic.NewUpdateOrderStatusLogic(ctx, s.svcCtx)
 	return l.UpdateOrderStatus(in)
+}
+
+func (s *OrderRpcServer) SeckillOrder(ctx context.Context, in *order.SeckillOrderRequest) (*order.SeckillOrderResponse, error) {
+	l := logic.NewSeckillOrderLogic(ctx, s.svcCtx)
+	return l.SeckillOrder(in)
 }

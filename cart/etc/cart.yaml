@@ -1,0 +1,18 @@
+Name: cart
+Host: 0.0.0.0
+ListenOn: 0.0.0.0:9084
+Mysql:
+  DataSource: root:password@tcp(localhost:3306)/shop?charset=utf8mb4&parseTime=true
+Redis:
+  Host: 127.0.0.1:6379
+  Key: cart
+  Pass: nU(8auUJZs6C
+ProductRpc:
+  Target: 127.0.0.1:9082
+  NonBlock: true
+OrderRpc:
+  Target: 127.0.0.1:9083
+  NonBlock: true
+Telemetry:
+  Metrics:  # 这是新版 go-zero 推荐的方式
+    Enabled: false

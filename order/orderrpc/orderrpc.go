@@ -29,10 +29,10 @@ type (
 
 	OrderRpc interface {
 		CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
-		SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error)
 		GetOrderDetail(ctx context.Context, in *GetOrderDetailRequest, opts ...grpc.CallOption) (*GetOrderDetailResponse, error)
 		ListOrders(ctx context.Context, in *ListOrdersRequest, opts ...grpc.CallOption) (*ListOrdersResponse, error)
 		UpdateOrderStatus(ctx context.Context, in *UpdateOrderStatusRequest, opts ...grpc.CallOption) (*UpdateOrderStatusResponse, error)
+		SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error)
 	}
 
 	defaultOrderRpc struct {
@@ -51,11 +51,6 @@ func (m *defaultOrderRpc) CreateOrder(ctx context.Context, in *CreateOrderReques
 	return client.CreateOrder(ctx, in, opts...)
 }
 
-func (m *defaultOrderRpc) SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error) {
-	client := order.NewOrderRpcClient(m.cli.Conn())
-	return client.SeckillOrder(ctx, in, opts...)
-}
-
 func (m *defaultOrderRpc) GetOrderDetail(ctx context.Context, in *GetOrderDetailRequest, opts ...grpc.CallOption) (*GetOrderDetailResponse, error) {
 	client := order.NewOrderRpcClient(m.cli.Conn())
 	return client.GetOrderDetail(ctx, in, opts...)
@@ -69,4 +64,9 @@ func (m *defaultOrderRpc) ListOrders(ctx context.Context, in *ListOrdersRequest,
 func (m *defaultOrderRpc) UpdateOrderStatus(ctx context.Context, in *UpdateOrderStatusRequest, opts ...grpc.CallOption) (*UpdateOrderStatusResponse, error) {
 	client := order.NewOrderRpcClient(m.cli.Conn())
 	return client.UpdateOrderStatus(ctx, in, opts...)
+}
+
+func (m *defaultOrderRpc) SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error) {
+	client := order.NewOrderRpcClient(m.cli.Conn())
+	return client.SeckillOrder(ctx, in, opts...)
 }

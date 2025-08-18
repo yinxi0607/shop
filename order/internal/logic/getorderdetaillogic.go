@@ -53,8 +53,8 @@ func (l *GetOrderDetailLogic) GetOrderDetail(in *order.GetOrderDetailRequest) (*
 	orderItems := make([]*order.OrderItem, len(items))
 	for i, item := range items {
 		orderItems[i] = &order.OrderItem{
-			ProductId: item.ProductId,
-			Quantity:  int32(item.Quantity),
+			Pid:      item.ProductId,
+			Quantity: int32(item.Quantity),
 		}
 	}
 

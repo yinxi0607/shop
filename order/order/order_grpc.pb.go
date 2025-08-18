@@ -20,10 +20,10 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	OrderRpc_CreateOrder_FullMethodName       = "/order.OrderRpc/CreateOrder"
-	OrderRpc_SeckillOrder_FullMethodName      = "/order.OrderRpc/SeckillOrder"
 	OrderRpc_GetOrderDetail_FullMethodName    = "/order.OrderRpc/GetOrderDetail"
 	OrderRpc_ListOrders_FullMethodName        = "/order.OrderRpc/ListOrders"
 	OrderRpc_UpdateOrderStatus_FullMethodName = "/order.OrderRpc/UpdateOrderStatus"
+	OrderRpc_SeckillOrder_FullMethodName      = "/order.OrderRpc/SeckillOrder"
 )
 
 // OrderRpcClient is the client API for OrderRpc service.
@@ -31,10 +31,10 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderRpcClient interface {
 	CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
-	SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error)
 	GetOrderDetail(ctx context.Context, in *GetOrderDetailRequest, opts ...grpc.CallOption) (*GetOrderDetailResponse, error)
 	ListOrders(ctx context.Context, in *ListOrdersRequest, opts ...grpc.CallOption) (*ListOrdersResponse, error)
 	UpdateOrderStatus(ctx context.Context, in *UpdateOrderStatusRequest, opts ...grpc.CallOption) (*UpdateOrderStatusResponse, error)
+	SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error)
 }
 
 type orderRpcClient struct {
@@ -49,16 +49,6 @@ func (c *orderRpcClient) CreateOrder(ctx context.Context, in *CreateOrderRequest
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateOrderResponse)
 	err := c.cc.Invoke(ctx, OrderRpc_CreateOrder_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *orderRpcClient) SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SeckillOrderResponse)
-	err := c.cc.Invoke(ctx, OrderRpc_SeckillOrder_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -95,15 +85,25 @@ func (c *orderRpcClient) UpdateOrderStatus(ctx context.Context, in *UpdateOrderS
 	return out, nil
 }
 
+func (c *orderRpcClient) SeckillOrder(ctx context.Context, in *SeckillOrderRequest, opts ...grpc.CallOption) (*SeckillOrderResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SeckillOrderResponse)
+	err := c.cc.Invoke(ctx, OrderRpc_SeckillOrder_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrderRpcServer is the server API for OrderRpc service.
 // All implementations must embed UnimplementedOrderRpcServer
 // for forward compatibility.
 type OrderRpcServer interface {
 	CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error)
-	SeckillOrder(context.Context, *SeckillOrderRequest) (*SeckillOrderResponse, error)
 	GetOrderDetail(context.Context, *GetOrderDetailRequest) (*GetOrderDetailResponse, error)
 	ListOrders(context.Context, *ListOrdersRequest) (*ListOrdersResponse, error)
 	UpdateOrderStatus(context.Context, *UpdateOrderStatusRequest) (*UpdateOrderStatusResponse, error)
+	SeckillOrder(context.Context, *SeckillOrderRequest) (*SeckillOrderResponse, error)
 	mustEmbedUnimplementedOrderRpcServer()
 }
 
@@ -117,9 +117,6 @@ type UnimplementedOrderRpcServer struct{}
 func (UnimplementedOrderRpcServer) CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOrder not implemented")
 }
-func (UnimplementedOrderRpcServer) SeckillOrder(context.Context, *SeckillOrderRequest) (*SeckillOrderResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SeckillOrder not implemented")
-}
 func (UnimplementedOrderRpcServer) GetOrderDetail(context.Context, *GetOrderDetailRequest) (*GetOrderDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrderDetail not implemented")
 }
@@ -128,6 +125,9 @@ func (UnimplementedOrderRpcServer) ListOrders(context.Context, *ListOrdersReques
 }
 func (UnimplementedOrderRpcServer) UpdateOrderStatus(context.Context, *UpdateOrderStatusRequest) (*UpdateOrderStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateOrderStatus not implemented")
+}
+func (UnimplementedOrderRpcServer) SeckillOrder(context.Context, *SeckillOrderRequest) (*SeckillOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SeckillOrder not implemented")
 }
 func (UnimplementedOrderRpcServer) mustEmbedUnimplementedOrderRpcServer() {}
 func (UnimplementedOrderRpcServer) testEmbeddedByValue()                  {}
@@ -164,24 +164,6 @@ func _OrderRpc_CreateOrder_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrderRpcServer).CreateOrder(ctx, req.(*CreateOrderRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _OrderRpc_SeckillOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SeckillOrderRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(OrderRpcServer).SeckillOrder(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: OrderRpc_SeckillOrder_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderRpcServer).SeckillOrder(ctx, req.(*SeckillOrderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -240,6 +222,24 @@ func _OrderRpc_UpdateOrderStatus_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OrderRpc_SeckillOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SeckillOrderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderRpcServer).SeckillOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OrderRpc_SeckillOrder_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderRpcServer).SeckillOrder(ctx, req.(*SeckillOrderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OrderRpc_ServiceDesc is the grpc.ServiceDesc for OrderRpc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -252,10 +252,6 @@ var OrderRpc_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _OrderRpc_CreateOrder_Handler,
 		},
 		{
-			MethodName: "SeckillOrder",
-			Handler:    _OrderRpc_SeckillOrder_Handler,
-		},
-		{
 			MethodName: "GetOrderDetail",
 			Handler:    _OrderRpc_GetOrderDetail_Handler,
 		},
@@ -266,6 +262,10 @@ var OrderRpc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateOrderStatus",
 			Handler:    _OrderRpc_UpdateOrderStatus_Handler,
+		},
+		{
+			MethodName: "SeckillOrder",
+			Handler:    _OrderRpc_SeckillOrder_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

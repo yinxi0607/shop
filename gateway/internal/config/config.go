@@ -12,6 +12,7 @@ type Config struct {
 	Redis      redis.RedisConf
 	ProductRpc zrpc.RpcClientConf
 	OrderRpc   zrpc.RpcClientConf
+	CartRpc    zrpc.RpcClientConf
 	Jwt        struct {
 		AccessSecret string
 		AccessExpire int64

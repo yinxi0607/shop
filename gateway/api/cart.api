@@ -1,0 +1,62 @@
+syntax = "v1"
+
+type CartItem {
+    Pid string `json:"pid"` // 修改为 Pid
+    Quantity int32 `json:"quantity"`
+}
+
+type AddToCartRequest {
+    UserID string `json:"user_id,optional"` // 从 JWT 获取
+    Pid string `json:"pid"` // 修改为 Pid
+    Quantity int32 `json:"quantity"`
+}
+
+type AddToCartResponse {
+    Success bool `json:"success"`
+}
+
+type GetCartRequest {
+    UserID string `form:"user_id,optional"` // 从 JWT 获取
+}
+
+type GetCartResponse {
+    CartID string `json:"cart_id"`
+    Items []CartItem `json:"items"`
+}
+
+type UpdateCartRequest {
+    UserID string `json:"user_id,optional"` // 从 JWT 获取
+    Pid string `json:"pid"` // 修改为 Pid
+    Quantity int32 `json:"quantity"`
+}
+
+type UpdateCartResponse {
+    Success bool `json:"success"`
+}
+
+type ClearCartRequest {
+    UserID string `json:"user_id,optional"` // 从 JWT 获取
+}
+
+type ClearCartResponse {
+    Success bool `json:"success"`
+}
+
+@server(
+    group: cart
+    middleware: JwtMiddleware
+    prefix: /api/v1
+)
+service GatewayAPI {
+    @handler AddToCart
+    post /cart/add (AddToCartRequest) returns (AddToCartResponse)
+
+    @handler GetCart
+    get /cart (GetCartRequest) returns (GetCartResponse)
+
+    @handler UpdateCart
+    put /cart/update (UpdateCartRequest) returns (UpdateCartResponse)
+
+    @handler ClearCart
+    delete /cart/clear (ClearCartRequest) returns (ClearCartResponse)
+}

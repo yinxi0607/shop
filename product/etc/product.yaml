@@ -10,3 +10,6 @@ Redis:
 Jwt:
   AccessSecret: your-secret-key
   AccessExpire: 604800
+Telemetry:
+  Metrics:  # 这是新版 go-zero 推荐的方式
+    Enabled: false

@@ -3,5 +3,6 @@ syntax = "v1"
 import "api/user.api"
 import "api/product.api"
 import "api/order.api"
+import "api/cart.api"
 
 // No handler or path definitions, only imports

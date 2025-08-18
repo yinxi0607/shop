@@ -30,7 +30,7 @@ func (l *GetOrderDetailLogic) GetOrderDetail(req *types.GetOrderDetailRequest) (
 	}
 	items := make([]types.OrderItem, len(res.Order.Items))
 	for i, item := range res.Order.Items {
-		items[i] = types.OrderItem{ProductID: item.ProductId, Quantity: item.Quantity}
+		items[i] = types.OrderItem{Pid: item.Pid, Quantity: item.Quantity}
 	}
 	return &types.GetOrderDetailResponse{
 		Order: types.Order{
