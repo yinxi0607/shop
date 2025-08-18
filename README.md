@@ -66,66 +66,71 @@ Shop 是一个基于 **Go** 和 **go-zero** 框架开发的微服务电商系统
 创建 MySQL 数据库 mall 并执行以下建表语句：
    ```sql
 
-CREATE TABLE products (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-pid VARCHAR(50) NOT NULL UNIQUE,
-name VARCHAR(100) NOT NULL,
-description TEXT,
-detail TEXT,
-main_image VARCHAR(255),
-thumbnail VARCHAR(255),
-price DOUBLE NOT NULL,
-stock INT NOT NULL,
-category_id VARCHAR(50),
-is_banner BOOLEAN DEFAULT FALSE,
-created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE products
+(
+   id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+   pid         VARCHAR(50)  NOT NULL UNIQUE,
+   name        VARCHAR(100) NOT NULL,
+   description TEXT,
+   detail      TEXT,
+   main_image  VARCHAR(255),
+   thumbnail   VARCHAR(255),
+   price DOUBLE NOT NULL,
+   stock       INT          NOT NULL,
+   category_id VARCHAR(50),
+   is_banner   BOOLEAN               DEFAULT FALSE,
+   created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE carts (
-cart_id VARCHAR(50) NOT NULL UNIQUE,
-user_id VARCHAR(50) NOT NULL UNIQUE,
-created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-deleted_at TIMESTAMP NULL,
-PRIMARY KEY (cart_id)
+CREATE TABLE carts
+(
+   cart_id    VARCHAR(50) NOT NULL UNIQUE,
+   user_id    VARCHAR(50) NOT NULL UNIQUE,
+   created_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   deleted_at TIMESTAMP NULL,
+   PRIMARY KEY (cart_id)
 );
 
-CREATE TABLE cart_items (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-cart_id VARCHAR(50) NOT NULL,
-product_id VARCHAR(50) NOT NULL,
-quantity INT NOT NULL,
-created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-deleted_at TIMESTAMP NULL,
-UNIQUE KEY uk_cart_product (cart_id, product_id)
+CREATE TABLE cart_items
+(
+   id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+   cart_id    VARCHAR(50) NOT NULL,
+   product_id VARCHAR(50) NOT NULL,
+   quantity   INT         NOT NULL,
+   created_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   deleted_at TIMESTAMP NULL,
+   UNIQUE KEY uk_cart_product (cart_id, product_id)
 );
 
-CREATE TABLE orders (
-order_id VARCHAR(50) NOT NULL UNIQUE,
-user_id VARCHAR(50) NOT NULL,
-total_price DOUBLE NOT NULL,
-status VARCHAR(20) NOT NULL,
-created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-PRIMARY KEY (order_id)
+CREATE TABLE orders
+(
+   order_id   VARCHAR(50) NOT NULL UNIQUE,
+   user_id    VARCHAR(50) NOT NULL,
+   total_price DOUBLE NOT NULL,
+   status     VARCHAR(20) NOT NULL,
+   created_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (order_id)
 );
 
-CREATE TABLE order_items (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-order_id VARCHAR(50) NOT NULL,
-product_id VARCHAR(50) NOT NULL,
-quantity INT NOT NULL,
-created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE order_items
+(
+   id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+   order_id   VARCHAR(50) NOT NULL,
+   product_id VARCHAR(50) NOT NULL,
+   quantity   INT         NOT NULL,
+   created_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_products_pid ON products(pid);
-CREATE INDEX idx_carts_user_id ON carts(user_id);
-CREATE INDEX idx_cart_items_cart_id ON cart_items(cart_id);
-CREATE INDEX idx_orders_user_id ON orders(user_id);
-CREATE INDEX idx_order_items_order_id ON order_items(order_id);
+CREATE INDEX idx_products_pid ON products (pid);
+CREATE INDEX idx_carts_user_id ON carts (user_id);
+CREATE INDEX idx_cart_items_cart_id ON cart_items (cart_id);
+CREATE INDEX idx_orders_user_id ON orders (user_id);
+CREATE INDEX idx_order_items_order_id ON order_items (order_id);
 
 ```
 配置服务shop/product/etc/product.yaml:
