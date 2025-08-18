@@ -28,7 +28,7 @@ const (
 	UserRpc_ChangeRole_FullMethodName     = "/user.UserRpc/ChangeRole"
 )
 
-// UserRpcClient is the client API for UserRpc service.
+// UserRpcClient is the client API。.md for UserRpc service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserRpcClient interface {
@@ -119,7 +119,7 @@ func (c *userRpcClient) ChangeRole(ctx context.Context, in *ChangeRoleRequest, o
 	return out, nil
 }
 
-// UserRpcServer is the server API for UserRpc service.
+// UserRpcServer is the server API。.md for UserRpc service.
 // All implementations must embed UnimplementedUserRpcServer
 // for forward compatibility.
 type UserRpcServer interface {

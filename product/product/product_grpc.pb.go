@@ -27,7 +27,7 @@ const (
 	ProductRpc_ListRecommendedProducts_FullMethodName = "/product.ProductRpc/ListRecommendedProducts"
 )
 
-// ProductRpcClient is the client API for ProductRpc service.
+// ProductRpcClient is the client API。.md for ProductRpc service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProductRpcClient interface {
@@ -107,7 +107,7 @@ func (c *productRpcClient) ListRecommendedProducts(ctx context.Context, in *List
 	return out, nil
 }
 
-// ProductRpcServer is the server API for ProductRpc service.
+// ProductRpcServer is the server API。.md for ProductRpc service.
 // All implementations must embed UnimplementedProductRpcServer
 // for forward compatibility.
 type ProductRpcServer interface {

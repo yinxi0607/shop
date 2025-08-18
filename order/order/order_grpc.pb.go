@@ -26,7 +26,7 @@ const (
 	OrderRpc_SeckillOrder_FullMethodName      = "/order.OrderRpc/SeckillOrder"
 )
 
-// OrderRpcClient is the client API for OrderRpc service.
+// OrderRpcClient is the client API。.md for OrderRpc service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderRpcClient interface {
@@ -95,7 +95,7 @@ func (c *orderRpcClient) SeckillOrder(ctx context.Context, in *SeckillOrderReque
 	return out, nil
 }
 
-// OrderRpcServer is the server API for OrderRpc service.
+// OrderRpcServer is the server API。.md for OrderRpc service.
 // All implementations must embed UnimplementedOrderRpcServer
 // for forward compatibility.
 type OrderRpcServer interface {

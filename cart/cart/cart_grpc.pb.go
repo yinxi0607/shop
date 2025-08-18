@@ -25,7 +25,7 @@ const (
 	CartRpc_ClearCart_FullMethodName  = "/cart.CartRpc/ClearCart"
 )
 
-// CartRpcClient is the client API for CartRpc service.
+// CartRpcClient is the client API。.md for CartRpc service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CartRpcClient interface {
@@ -83,7 +83,7 @@ func (c *cartRpcClient) ClearCart(ctx context.Context, in *ClearCartRequest, opt
 	return out, nil
 }
 
-// CartRpcServer is the server API for CartRpc service.
+// CartRpcServer is the server API。.md for CartRpc service.
 // All implementations must embed UnimplementedCartRpcServer
 // for forward compatibility.
 type CartRpcServer interface {
