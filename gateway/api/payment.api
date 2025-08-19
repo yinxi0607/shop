@@ -1,0 +1,83 @@
+syntax = "v1"
+
+type Payment {
+    PaymentId string `json:"payment_id"`
+    OrderId string `json:"order_id"`
+    UserId string `json:"user_id"`
+    Amount float64 `json:"amount"`
+    PaymentMethod string `json:"payment_method"`
+    Status string `json:"status"`
+    TransactionId string `json:"transaction_id"`
+    CreatedAt string `json:"created_at"`
+    UpdatedAt string `json:"updated_at"`
+}
+
+type Refund {
+    RefundId string `json:"refund_id"`
+    PaymentId string `json:"payment_id"`
+    OrderId string `json:"order_id"`
+    UserId string `json:"user_id"`
+    Amount float64 `json:"amount"`
+    Status string `json:"status"`
+    TransactionId string `json:"transaction_id"`
+    CreatedAt string `json:"created_at"`
+    UpdatedAt string `json:"updated_at"`
+}
+
+type CreatePaymentRequest {
+    OrderId string `json:"order_id"`
+    UserId string `json:"user_id"`
+    PaymentMethod string `json:"payment_method"`
+}
+
+type CreatePaymentResponse {
+    PaymentId string `json:"payment_id"`
+    PaymentUrl string `json:"payment_url"`
+}
+
+type GetPaymentStatusRequest {
+    PaymentId string `json:"payment_id"`
+    UserId string `json:"user_id"`
+}
+
+type GetPaymentStatusResponse {
+    Payment Payment `json:"payment"`
+}
+
+type RefundRequest {
+    PaymentId string `json:"payment_id"`
+    UserId string `json:"user_id"`
+    Amount float64 `json:"amount"`
+}
+
+type RefundResponse {
+    RefundId string `json:"refund_id"`
+}
+
+type GetRefundStatusRequest {
+    RefundId string `json:"refund_id"`
+    UserId string `json:"user_id"`
+}
+
+type GetRefundStatusResponse {
+    Refund Refund `json:"refund"`
+}
+
+@server(
+    group: payment
+    middleware: JwtMiddleware
+    prefix: /api/v1
+)
+service GatewayAPI {
+    @handler CreatePayment
+    post /payment/create (CreatePaymentRequest) returns (CreatePaymentResponse)
+
+    @handler GetPaymentStatus
+    get /payment/status (GetPaymentStatusRequest) returns (GetPaymentStatusResponse)
+
+    @handler Refund
+    post /payment/refund (RefundRequest) returns (RefundResponse)
+
+    @handler GetRefundStatus
+    get /payment/refund/status (GetRefundStatusRequest) returns (GetRefundStatusResponse)
+}

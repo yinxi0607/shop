@@ -16,3 +16,8 @@ CartRpc:
 Telemetry:
   Metrics:  # 这是新版 go-zero 推荐的方式
     Enabled: false
+Kafka:
+  Brokers:
+    - localhost:9092
+  Topic: payment_notifications
+  Group: order_group

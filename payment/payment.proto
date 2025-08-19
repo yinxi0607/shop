@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package payment;
+
+option go_package = "./payment";
+
+message Payment {
+  string PaymentId = 1;
+  string OrderId = 2;
+  string UserId = 3;
+  double Amount = 4;
+  string PaymentMethod = 5;  // wechat, alipay
+  string Status = 6;        // pending, completed, failed
+  string TransactionId = 7;
+  string CreatedAt = 8;
+  string UpdatedAt = 9;
+}
+
+message Refund {
+  string RefundId = 1;
+  string PaymentId = 2;
+  string OrderId = 3;
+  string UserId = 4;
+  double Amount = 5;
+  string Status = 6;        // pending, completed, failed
+  string TransactionId = 7;
+  string CreatedAt = 8;
+  string UpdatedAt = 9;
+}
+
+message CreatePaymentRequest {
+  string OrderId = 1;
+  string UserId = 2;
+  string PaymentMethod = 3;  // wechat, alipay
+}
+
+message CreatePaymentResponse {
+  string PaymentId = 1;
+  string PaymentUrl = 2;
+}
+
+message GetPaymentStatusRequest {
+  string PaymentId = 1;
+  string UserId = 2;
+}
+
+message GetPaymentStatusResponse {
+  Payment Payment = 1;
+}
+
+message PaymentCallbackRequest {
+  string PaymentId = 1;
+  string TransactionId = 2;
+  string Status = 3;  // completed, failed
+  string Sign = 4;    // 回调签名
+}
+
+message PaymentCallbackResponse {
+  bool Success = 1;
+}
+
+message RefundRequest {
+  string PaymentId = 1;
+  string UserId = 2;
+  double Amount = 3;  // 退款金额
+}
+
+message RefundResponse {
+  string RefundId = 1;
+}
+
+message GetRefundStatusRequest {
+  string RefundId = 1;
+  string UserId = 2;
+}
+
+message GetRefundStatusResponse {
+  Refund Refund = 1;
+}
+
+service PaymentRpc {
+  rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
+  rpc GetPaymentStatus(GetPaymentStatusRequest) returns (GetPaymentStatusResponse);
+  rpc PaymentCallback(PaymentCallbackRequest) returns (PaymentCallbackResponse);
+  rpc Refund(RefundRequest) returns (RefundResponse);
+  rpc GetRefundStatus(GetRefundStatusRequest) returns (GetRefundStatusResponse);
+}

@@ -1,0 +1,26 @@
+Name: payment
+Host: 0.0.0.0
+Port: 9085
+Mysql:
+  DataSource: root:password@tcp(localhost:3306)/shop?charset=utf8mb4&parseTime=true
+Redis:
+  Host: 127.0.0.1:6379
+  Key: payment
+  Pass: nU(8auUJZs6C
+OrderRpc:
+  Target: 127.0.0.1:9083
+  NonBlock: true
+Kafka:
+  Brokers:
+    - kafka:9092
+  Topic: payment_notifications
+WechatPay:
+  AppId: your_wechat_app_id
+  MchId: your_wechat_mch_id
+  ApiKey: your_wechat_api_key
+Alipay:
+  AppId: your_alipay_app_id
+  PrivateKey: your_alipay_private_key
+  PublicKey: your_alipay_public_key
+  NotifyUrl: http://your-domain/api/v1/payment/callback
+  IsProd: false

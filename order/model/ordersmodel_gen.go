@@ -33,6 +33,7 @@ type (
 		CountByUserId(ctx context.Context, userId string) (int64, error)
 		Transact(func(session sqlx.Session) error) error
 		FindByUserId(ctx context.Context, userId string, page, pageSize int32) ([]*Orders, error)
+		UpdateStates(ctx context.Context, orderId, userId, status string) error
 	}
 
 	defaultOrdersModel struct {
@@ -102,6 +103,12 @@ func (m *defaultOrdersModel) Insert(ctx context.Context, data *Orders) (sql.Resu
 func (m *defaultOrdersModel) Update(ctx context.Context, newData *Orders) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, ordersRowsWithPlaceHolder)
 	_, err := m.conn.ExecCtx(ctx, query, newData.OrderId, newData.UserId, newData.TotalPrice, newData.Status, newData.DeletedAt, newData.Id)
+	return err
+}
+
+func (m *defaultOrdersModel) UpdateStates(ctx context.Context, orderId, userId, status string) error {
+	query := fmt.Sprintf("update %s set status=? where `order_id` = ? and `user_id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, status, orderId, userId)
 	return err
 }
 
