@@ -39,7 +39,7 @@ Shop 是一个基于 **Go** 和 **go-zero** 框架开发的微服务电商系统
 - **cart 服务**: 管理购物车操作（添加、更新、删除、清空），`cart_id` 为 UUID，支持软删除。
 - **order 服务**: 处理普通订单（购物车或直接下单）、秒杀订单、订单查询，使用 Redis 锁防止超卖。
 - **gateway 服务**: 提供 RESTful API 入口，通过 `JwtMiddleware` 验证用户身份，调用 gRPC 接口。
-
+- **payment 服务**: 支付系统
 ---
 
 ## 安装与部署
